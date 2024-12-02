@@ -14,11 +14,11 @@ plugins {
 }
 apply plugin: 'net.minecraftforge.gradle'
 
-version = '1.20.1-2.0.2'
-group = 'com.jeremiahbl.bfcmod'
+version = '1.20.1-1.0.1'
+group = 'com.jeremiahbl.bfcrmod'
 
 base {
-    archivesName = 'bfcmod'
+    archivesName = 'bfcrmod'
 }
 
 // Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.

@@ -1,11 +1,11 @@
-package com.jeremiahbl.bfcmod.commands;
+package com.jeremiahbl.bfcrmod.commands;
 
 import java.util.Arrays;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
-import com.jeremiahbl.bfcmod.TextFormatter;
-import com.jeremiahbl.bfcmod.config.ConfigHandler;
-import com.jeremiahbl.bfcmod.config.PermissionsHandler;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.TextFormatter;
+import com.jeremiahbl.bfcrmod.config.ConfigHandler;
+import com.jeremiahbl.bfcrmod.config.PermissionsHandler;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -17,7 +17,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.minecraftforge.server.permission.nodes.PermissionNode;
 
 public class BfcCommands {
-	private static final Iterable<String> bfcModSubCommands = Arrays.asList(new String[] { 
+	private static final Iterable<String> bfcrmodSubCommands = Arrays.asList(new String[] { 
 			"info", "colors", "test"
 	});
 	
@@ -39,9 +39,9 @@ public class BfcCommands {
 	
 	public static void register(CommandDispatcher<CommandSourceStack> disp) {
 		disp.register(Commands.literal("bfc").requires((c) -> {
-				return checkPermission(c, PermissionsHandler.bfcModCommand);
+				return checkPermission(c, PermissionsHandler.bfcrmodCommand);
 			}).then(Commands.argument("mode", StringArgumentType.greedyString())
-					.suggests((context, builder) -> SharedSuggestionProvider.suggest(bfcModSubCommands, builder))
+					.suggests((context, builder) -> SharedSuggestionProvider.suggest(bfcrmodSubCommands, builder))
 					.executes(ctx -> modCommand(ctx))));
 		if(ConfigHandler.config.enableColorsCommand.get()) {
 			disp.register(Commands.literal("colors").requires((c) -> {
@@ -55,12 +55,12 @@ public class BfcCommands {
 		String arg = StringArgumentType.getString(ctx, "mode");
             switch (arg) {
                 case "colors" -> {
-                    if(checkContextPermission(ctx, PermissionsHandler.bfcModCommandColorsSubCommand))
+                    if(checkContextPermission(ctx, PermissionsHandler.bfcrmodCommandColorsSubCommand))
                         return colorCommand(ctx);
                     else return failNoPermission(ctx);
                 }
                 case "info" -> {
-                    if(checkContextPermission(ctx, PermissionsHandler.bfcModCommandInfoSubCommand)) {
+                    if(checkContextPermission(ctx, PermissionsHandler.bfcrmodCommandInfoSubCommand)) {
                         boolean hasMetaProv = BetterForgeChat.instance.metadataProvider != null;
                         boolean hasNickProv = BetterForgeChat.instance.nicknameProvider != null;
                         String metaProvName = hasMetaProv ? BetterForgeChat.instance.metadataProvider.getProviderName() : "";

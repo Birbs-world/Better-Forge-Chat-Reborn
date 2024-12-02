@@ -1,16 +1,16 @@
-package com.jeremiahbl.bfcmod.events;
+package com.jeremiahbl.bfcrmod.events;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
-import com.jeremiahbl.bfcmod.MarkdownFormatter;
-import com.jeremiahbl.bfcmod.TextFormatter;
-import com.jeremiahbl.bfcmod.config.ConfigHandler;
-import com.jeremiahbl.bfcmod.config.IReloadable;
-import com.jeremiahbl.bfcmod.config.PermissionsHandler;
-import com.jeremiahbl.bfcmod.utils.BetterForgeChatUtilities;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.MarkdownFormatter;
+import com.jeremiahbl.bfcrmod.TextFormatter;
+import com.jeremiahbl.bfcrmod.config.ConfigHandler;
+import com.jeremiahbl.bfcrmod.config.IReloadable;
+import com.jeremiahbl.bfcrmod.config.PermissionsHandler;
+import com.jeremiahbl.bfcrmod.utils.BetterForgeChatUtilities;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.ChatFormatting;

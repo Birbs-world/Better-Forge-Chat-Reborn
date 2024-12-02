@@ -1,4 +1,4 @@
-package com.jeremiahbl.bfcmod.events;
+package com.jeremiahbl.bfcrmod.events;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -6,8 +6,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-
-import java.util.Iterator;
 
 public class ServerMessageEvent {
     public static void sendMessage(Player player, MutableComponent message) {

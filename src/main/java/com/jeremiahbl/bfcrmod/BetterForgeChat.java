@@ -1,9 +1,9 @@
-package com.jeremiahbl.bfcmod;
+package com.jeremiahbl.bfcrmod;
 
-import com.jeremiahbl.bfcmod.commands.NickCommands;
-import com.jeremiahbl.bfcmod.config.*;
-import com.jeremiahbl.bfcmod.events.*;
-import com.jeremiahbl.bfcmod.utils.*;
+import com.jeremiahbl.bfcrmod.commands.NickCommands;
+import com.jeremiahbl.bfcrmod.config.*;
+import com.jeremiahbl.bfcrmod.events.*;
+import com.jeremiahbl.bfcrmod.utils.*;
 import com.mojang.logging.LogUtils;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 public class BetterForgeChat {
 	public static final String CHAT_ID_STR = 
 			"&cBetter &9&lForge&r &eChat&r &d(c) Jeremiah Lowe, Disa Kandria 2022-2024&r\n";
-	public static final String MODID = "bfcmod";
+	public static final String MODID = "bfcrmod";
 	public static final String VERSION = "V2.0.2";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BetterForgeChat instance;

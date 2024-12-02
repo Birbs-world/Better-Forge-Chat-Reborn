@@ -1,13 +1,13 @@
-package com.jeremiahbl.bfcmod.commands;
+package com.jeremiahbl.bfcrmod.commands;
 
 import java.util.List;
 import java.util.UUID;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
-import com.jeremiahbl.bfcmod.TextFormatter;
-import com.jeremiahbl.bfcmod.config.ConfigHandler;
-import com.jeremiahbl.bfcmod.config.PermissionsHandler;
-import com.jeremiahbl.bfcmod.config.PlayerData;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.TextFormatter;
+import com.jeremiahbl.bfcrmod.config.ConfigHandler;
+import com.jeremiahbl.bfcrmod.config.PermissionsHandler;
+import com.jeremiahbl.bfcrmod.config.PlayerData;
 import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;

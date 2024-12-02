@@ -1,4 +1,4 @@
-package com.jeremiahbl.bfcmod;
+package com.jeremiahbl.bfcrmod;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;

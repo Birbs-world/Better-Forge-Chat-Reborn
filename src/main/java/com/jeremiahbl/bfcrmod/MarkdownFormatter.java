@@ -1,4 +1,4 @@
-package com.jeremiahbl.bfcmod;
+package com.jeremiahbl.bfcrmod;
 
 public class MarkdownFormatter {
 	public static final String markdownStringToFormattedString(String md) {

@@ -1,6 +1,6 @@
-package com.jeremiahbl.bfcmod.events;
+package com.jeremiahbl.bfcrmod.events;
 
-import com.jeremiahbl.bfcmod.commands.BfcCommands;
+import com.jeremiahbl.bfcrmod.commands.BfcCommands;
 
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

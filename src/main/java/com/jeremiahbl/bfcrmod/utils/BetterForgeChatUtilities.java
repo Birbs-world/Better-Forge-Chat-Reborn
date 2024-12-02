@@ -1,8 +1,8 @@
-package com.jeremiahbl.bfcmod.utils;
+package com.jeremiahbl.bfcrmod.utils;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
-import com.jeremiahbl.bfcmod.TextFormatter;
-import com.jeremiahbl.bfcmod.config.ConfigHandler;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.TextFormatter;
+import com.jeremiahbl.bfcrmod.config.ConfigHandler;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.network.chat.MutableComponent;

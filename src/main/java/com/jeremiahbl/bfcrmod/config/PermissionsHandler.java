@@ -1,10 +1,10 @@
-package com.jeremiahbl.bfcmod.config;
+package com.jeremiahbl.bfcrmod.config;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
-import com.jeremiahbl.bfcmod.TextFormatter;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.TextFormatter;
 
 import net.minecraft.network.chat.Component;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -30,11 +30,11 @@ public class PermissionsHandler {
 	
 	public static PermissionNode<Boolean> colorsCommand =
 			ezyPermission("commands.colors", true, "Colors command", "Enables/Disables the \"/colors\" command");
-	public static PermissionNode<Boolean> bfcModCommand = 
+	public static PermissionNode<Boolean> bfcrmodCommand = 
 			ezyPermission("commands.bfc.allowed", true, "BetterForgeChat command", "Enables/Disables the \"/bfc\" command");
-	public static PermissionNode<Boolean> bfcModCommandColorsSubCommand = 
+	public static PermissionNode<Boolean> bfcrmodCommandColorsSubCommand = 
 			ezyPermission("commands.bfc.colors", true, "BetterForgeChat colors sub-command", "Enables/Disables the \"/bfc colors\" sub-command");
-	public static PermissionNode<Boolean> bfcModCommandInfoSubCommand = 
+	public static PermissionNode<Boolean> bfcrmodCommandInfoSubCommand = 
 			ezyPermission("commands.bfc.info", true, "BetterForgeChat info sub-command", "Enables/Disables the \"/bfc info\" sub-command");
 	
 	public static PermissionNode<Boolean> whoisCommand = 

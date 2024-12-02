@@ -1,4 +1,4 @@
-package com.jeremiahbl.bfcmod.config;
+package com.jeremiahbl.bfcrmod.config;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 

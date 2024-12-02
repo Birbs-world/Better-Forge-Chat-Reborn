@@ -1,7 +1,7 @@
 import java.lang.reflect.Field;
 
-import com.jeremiahbl.bfcmod.config.PermissionsHandler;
-import com.jeremiahbl.bfcmod.config.PlayerData;
+import com.jeremiahbl.bfcrmod.config.PermissionsHandler;
+import com.jeremiahbl.bfcrmod.config.PlayerData;
 
 import net.minecraftforge.server.permission.nodes.PermissionNode;
 

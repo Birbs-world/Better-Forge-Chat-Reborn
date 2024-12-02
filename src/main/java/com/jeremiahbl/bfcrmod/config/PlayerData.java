@@ -1,13 +1,19 @@
-package com.jeremiahbl.bfcmod.config;
+package com.jeremiahbl.bfcrmod.config;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+import java.util.UUID;
 
-import com.jeremiahbl.bfcmod.BetterForgeChat;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
 
 public class PlayerData {
 	public static final Map<UUID, PlayerData> map = new HashMap<>();
-	public static final String playerDataFileName = "bfcmod.playerdata";
+	public static final String playerDataFileName = "bfcrmod.playerdata";
 	
 	public final UUID uuid;
 	public String nickname = null;
