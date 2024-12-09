@@ -3,7 +3,6 @@ package com.jeremiahbl.bfcrmod;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.network.chat.contents.LiteralContents;
 
 public class BitwiseStyling {
 	public static final byte BOLD_BIT          = 1;

@@ -9,10 +9,6 @@ import dev.ftb.mods.ftbessentials.util.FTBEPlayerData;
 
 public class FTBNicknameProvider implements INicknameProvider {
 	@Override public String getPlayerNickname(GameProfile player) {
-		/* FTBEPlayerData data = FTBEPlayerData;
-		if(data != null && data.getNick() != null && data.getNick().length() > 0)
-			return data.getNick();
-		return null; */
 		FTBEPlayerData data = FTBEPlayerData.getOrCreate(player).orElse(null);
                 if (data != null && !data.getNick().isEmpty()) {
                     return data.getNick();

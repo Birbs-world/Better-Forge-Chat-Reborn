@@ -30,6 +30,7 @@ public class LuckPermsProvider implements IMetadataProvider {
 		}
 	}
 
+        @Override
 	public String[] getPlayerPrefixAndSuffix(GameProfile player) {
 		try {
 			CachedMetaData metaData = this.getMetaData(player);
@@ -39,7 +40,8 @@ public class LuckPermsProvider implements IMetadataProvider {
 		}
 	}
 
-	public @NonNull String getProviderName() {
+	public @NonNull@Override
+ String getProviderName() {
 		return "LuckPerms";
 	}
 }
