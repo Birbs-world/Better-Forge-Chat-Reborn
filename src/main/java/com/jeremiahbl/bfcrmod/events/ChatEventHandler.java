@@ -14,7 +14,9 @@ import com.jeremiahbl.bfcrmod.utils.BetterForgeChatUtilities;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.*;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.event.ServerChatEvent;
@@ -36,7 +38,6 @@ public class ChatEventHandler implements IReloadable {
 		chatMessageFormat = ConfigHandler.config.chatMessageFormat.get();
 		loaded = true;
 	}
-	
 	
 	public Style getHoverClickEventStyle(Component old) {
 		if(old instanceof TranslatableContents tcmp) {
@@ -67,6 +68,7 @@ public class ChatEventHandler implements IReloadable {
 		MutableComponent afterMsg = TextFormatter.stringToFormattedText(fmat.substring(fmat.indexOf("$msg") + 4));
 		boolean enableColor = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.coloredChatNode);
 		boolean enableStyle = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.styledChatNode);
+		
 		// Create an error message if the player isn't allowed to use styles/colors
 		String emsg = "";
 		if(!enableColor && TextFormatter.messageContainsColorsOrStyles(msg, true))
@@ -82,20 +84,23 @@ public class ChatEventHandler implements IReloadable {
 		// Convert markdown to normal essentials formatting
 		if(markdownEnabled && enableStyle && PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.markdownChatNode))
 			msg = MarkdownFormatter.markdownStringToFormattedString(msg);
+
 		// Start generating the main TextComponent
 		MutableComponent msgComp = TextFormatter.stringToFormattedText(msg, enableColor, enableStyle);
+
 		// Append the hover and click event crap
 		Style sty = getHoverClickEventStyle(e.getMessage());
 		MutableComponent ecmp = Component.empty();
 		if(sty != null && sty.getHoverEvent() != null)
 			ecmp.setStyle(sty);
 		e.setCanceled(true);
+		
 		MutableComponent newMessage = beforeMsg.append(msgComp.append(afterMsg));
+		
 		player.server.execute(() -> {
-			BetterForgeChat.LOGGER.info(newMessage.getString());
-
+			BetterForgeChat.LOGGER.info("[CHAT] "+newMessage.getString());
 			ServerMessageEvent.broadcastMessage(player.level(), newMessage);
 		});
-		//e.setMessage(beforeMsg.append(msgComp.append(afterMsg)));
+		
     }
 }

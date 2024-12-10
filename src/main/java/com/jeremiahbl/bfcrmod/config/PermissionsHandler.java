@@ -49,13 +49,15 @@ public class PermissionsHandler {
 			if(fld.getType() == PermissionNode.class) {
 				try { // Fuck adding all these nodes manually
 					pge.addNodes((PermissionNode<?>) fld.get(PermissionNode.class));
-				} catch (Exception e) {}
+				} catch (Exception e) {
+					BetterForgeChat.LOGGER.error("Exception: "+ e + " Caught on adding permission nodes");
+				}
 			}
 		}
 	}
 	
 	private static PermissionNode<Boolean> ezyPermission(String id, boolean defVal, String name, String desc) {
-		PermissionNode<Boolean> node = new PermissionNode<Boolean>(BetterForgeChat.MODID, id, 
+		PermissionNode<Boolean> node = new PermissionNode<>(BetterForgeChat.MODID, id, 
 				PermissionTypes.BOOLEAN, (player, uuid, context) -> defVal);
 		node.setInformation(Component.literal(name),TextFormatter.stringToFormattedText(desc));
 		return node;
@@ -69,6 +71,6 @@ public class PermissionsHandler {
 		} catch(IllegalStateException ise) {
 			BetterForgeChat.LOGGER.info("IllegalStateException when getting player tab list permissions, assuming false");
 		}
-		return bool == null ? false : bool.booleanValue();
+		return bool == null ? false : bool;
 	}
 }

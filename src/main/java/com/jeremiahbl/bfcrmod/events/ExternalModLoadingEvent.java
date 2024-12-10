@@ -11,6 +11,7 @@ import net.minecraftforge.event.server.ServerStartedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.loading.FMLEnvironment;
 
 @EventBusSubscriber
 public class ExternalModLoadingEvent {
@@ -30,29 +31,35 @@ public class ExternalModLoadingEvent {
 				ConfigHandler.config.autoEnableChatNicknameCommand.get()) {
 			BetterForgeChat.instance.nicknameProvider = new IntegratedNicknameProvider();
 			NickCommands.nicknameIntegrationEnabled = true;
-    		BetterForgeChat.LOGGER.info("Integraded nickname management enabled sucessfully!");
+    		BetterForgeChat.LOGGER.info("Integrated nickname management enabled successfully!");
 		}
 	}
 	private void loadLuckPerms() {
-		BetterForgeChat.LOGGER.info("Detected loaded status of luckperms is :" + ModList.get().isLoaded("luckperms"));
-		if(ModList.get().isLoaded("luckperms")) {
+		
+		if(FMLEnvironment.dist.isDedicatedServer()) {
+			BetterForgeChat.LOGGER.info("Detected loaded status of luckperms is :" + ModList.get().isLoaded("luckperms"));
+			if(ModList.get().isLoaded("luckperms")) {
 
-			if (!ConfigHandler.config.enableLuckPerms.get()) {
-				BetterForgeChat.LOGGER.info("LuckPerms API was skipped by configuration file!");
-				return;
-			}
-			BetterForgeChat.LOGGER.info("Attempting to load LuckPerms API!");
-			try {
-				BetterForgeChat.instance.metadataProvider = new LuckPermsProvider();
-				BetterForgeChat.LOGGER.info("LuckPerms API found and loaded successfully!");
+				if (!ConfigHandler.config.enableLuckPerms.get()) {
+					BetterForgeChat.LOGGER.info("LuckPerms API was skipped by configuration file!");
+					return;
+				}
+				BetterForgeChat.LOGGER.info("Attempting to integrate LuckPerms API!");
+				try {
+					BetterForgeChat.instance.metadataProvider = new LuckPermsProvider();
+					BetterForgeChat.LOGGER.info("LuckPerms API found and integrated successfully!");
 
-			} catch (Error e2) { // Could have a NoClassDefFoundError here!
+				} catch (Exception e) { // Could have a NoClassDefFoundError here!
+					BetterForgeChat.instance.metadataProvider = null;
+					BetterForgeChat.LOGGER.warn("OOPS something went wrong - LuckPerms wasn't found but the FML says its loaded, we won't use it!/nIf you see this warning please submit a issue report");
+				}
+			}else{
 				BetterForgeChat.instance.metadataProvider = null;
-				BetterForgeChat.LOGGER.warn("OOPS something went wrong - LuckPerms wasn't found but the FML says its loaded, we won't use it!/nIf you see this warning please submit a issue report");
+				BetterForgeChat.LOGGER.warn("LuckPerms API wasn't found, we won't use it!");
 			}
 		}else{
 			BetterForgeChat.instance.metadataProvider = null;
-			BetterForgeChat.LOGGER.warn("LuckPerms API wasn't found, we won't use it!");
+			BetterForgeChat.LOGGER.warn("Better Forge Chat Reborn is Running on client, Will not integrate Disabled LuckPerms API");
 		}
 	}
 	private void loadFtbEssentials() {
@@ -62,10 +69,10 @@ public class ExternalModLoadingEvent {
 				BetterForgeChat.LOGGER.info("FTB Essentials integration was skipped by configuration file!");
 				return;
 			}
-			BetterForgeChat.LOGGER.info("Attempting to load FTB Essentials!");
+			BetterForgeChat.LOGGER.info("Attempting to integrate FTB Essentials!");
 			try {
 				BetterForgeChat.instance.nicknameProvider = new FTBNicknameProvider();
-				BetterForgeChat.LOGGER.info("FTB Essentials API found and loaded sucessfully!");
+				BetterForgeChat.LOGGER.info("FTB Essentials API found and integrated successfully!");
 
 			} catch(Error e2) { // Could have a NoClassDefFoundError here!
 				BetterForgeChat.instance.nicknameProvider = null;
