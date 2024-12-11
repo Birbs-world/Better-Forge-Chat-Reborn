@@ -6,16 +6,14 @@ import com.jeremiahbl.bfcrmod.events.*;
 import com.jeremiahbl.bfcrmod.utils.*;
 import com.mojang.logging.LogUtils;
 
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkConstants;
 
 import org.slf4j.Logger;
+
+import com.jeremiahbl.bfcrmod.utils.forgeutils.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(BetterForgeChat.MODID )
@@ -47,29 +45,31 @@ public class BetterForgeChat {
     		BetterForgeChatUtilities.reloadConfig();
     	});
     	configurationHandler.registerReloadable(() -> BetterForgeChat.LOGGER.info("Configuration options loaded!"));
-    	MinecraftForge.EVENT_BUS.register(configurationHandler);
-    	// Get the mod loading context (useful for doing stuff)
-    	ModLoadingContext mlc = ModLoadingContext.get();
-    	// Set mod to ignore whether or not the other side has it (we only care about the server side - but this works on the client's side too)
-    	mlc.registerExtensionPoint(IExtensionPoint.DisplayTest.class, () -> new IExtensionPoint.DisplayTest(() -> NetworkConstants.IGNORESERVERONLY, (a, b) -> true));
-    	// Register mod configuration & permissions
-    	mlc.registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);
-    	MinecraftForge.EVENT_BUS.register(permissionsHandler);
+
+    	forge_event.register(configurationHandler);
+
+        // Set mod to ignore whether the other side has it (we only care about the server side - but this works on the client's side too)
+        forge_fml.MlContext(true);
+        //set config to register
+        forge_fml.MLConfig("COMMON", ConfigHandler.spec);
+
+    	forge_event.register(permissionsHandler); //register permissions handler
+
     	// Register mod loading completed event
         FMLJavaModLoadingContext.get().getModEventBus().addListener(this::loadComplete);
         // Register the mod itself
-        MinecraftForge.EVENT_BUS.register(this);
+        forge_event.register(this);
         // Register commands
-        MinecraftForge.EVENT_BUS.register(commandRegistrator);
+        forge_event.register(commandRegistrator);
 
     }
     private void loadComplete(final FMLLoadCompleteEvent e) {
     	// Register server chat event
-    	MinecraftForge.EVENT_BUS.register(chatHandler);
+    	forge_event.register(chatHandler);
     	// Register permissions mod API checking on server start
-        MinecraftForge.EVENT_BUS.register(modLoadingEvent);
+        forge_event.register(modLoadingEvent);
     	// Register player events (NameFormat and TabListNameFormat)
-        MinecraftForge.EVENT_BUS.register(playerEventHandler);
+        forge_event.register(playerEventHandler);
         // Final mod loading completion message
     	LOGGER.info("Mod loaded up and ready to go! (c) Jeremiah Lowe, Disa Kandria 2022 - 2024!");
     }

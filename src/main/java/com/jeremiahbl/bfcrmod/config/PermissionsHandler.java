@@ -31,11 +31,11 @@ public class PermissionsHandler {
 	public static PermissionNode<Boolean> colorsCommand =
 			ezyPermission("commands.colors", true, "Colors command", "Enables/Disables the \"/colors\" command");
 	public static PermissionNode<Boolean> bfcrmodCommand = 
-			ezyPermission("commands.bfc.allowed", true, "BetterForgeChat command", "Enables/Disables the \"/bfc\" command");
+			ezyPermission("commands.bfcr.allowed", true, "BetterForgeChat command", "Enables/Disables the \"/bfc\" command");
 	public static PermissionNode<Boolean> bfcrmodCommandColorsSubCommand = 
-			ezyPermission("commands.bfc.colors", true, "BetterForgeChat colors sub-command", "Enables/Disables the \"/bfc colors\" sub-command");
+			ezyPermission("commands.bfcr.colors", true, "BetterForgeChat colors sub-command", "Enables/Disables the \"/bfc colors\" sub-command");
 	public static PermissionNode<Boolean> bfcrmodCommandInfoSubCommand = 
-			ezyPermission("commands.bfc.info", true, "BetterForgeChat info sub-command", "Enables/Disables the \"/bfc info\" sub-command");
+			ezyPermission("commands.bfcr.info", true, "BetterForgeChat info sub-command", "Enables/Disables the \"/bfc info\" sub-command");
 	
 	public static PermissionNode<Boolean> whoisCommand = 
 			ezyPermission("commands.whois", true, "Nickname", "Enables/Disables the \"/whois <nickname>\" command");

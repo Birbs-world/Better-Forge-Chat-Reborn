@@ -2,5 +2,6 @@
 /bin
 /.gradle
 /.vscode
+/.idea
 /.licence
 /gradlew.bat
