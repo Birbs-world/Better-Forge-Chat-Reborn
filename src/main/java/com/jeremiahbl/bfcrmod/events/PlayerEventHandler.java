@@ -5,6 +5,7 @@ import com.jeremiahbl.bfcrmod.config.IReloadable;
 import com.jeremiahbl.bfcrmod.config.PermissionsHandler;
 import com.jeremiahbl.bfcrmod.config.PlayerData;
 import com.jeremiahbl.bfcrmod.utils.BetterForgeChatUtilities;
+import com.jeremiahbl.bfcrmod.BetterForgeChat;
 import com.mojang.authlib.GameProfile;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -27,25 +28,33 @@ public class PlayerEventHandler implements IReloadable {
 	}
 	
 	@SubscribeEvent
-	public void onTabListNameFormatEvent(TabListNameFormat e) { 
+	public void onTabListNameFormatEvent(TabListNameFormat e) {
+		BetterForgeChat.LOGGER.debug("Tablist formatting");
 		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() != null && e.getEntity() instanceof ServerPlayer) {
+			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
 			GameProfile player = e.getEntity().getGameProfile();
+			BetterForgeChat.LOGGER.debug("Tablist formatting for: "+ player);
 			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player, 
 				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getId(), PermissionsHandler.tabListNicknameNode),  
 				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getId(), PermissionsHandler.tabListMetadataNode)));
 		}
 	}
+
 	@SubscribeEvent
 	public void onNameFormatEvent(NameFormat e) {
 		if(e.getEntity() != null && e.getEntity() instanceof ServerPlayer)
 			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity().getGameProfile()));
 	}
+
 	@SubscribeEvent
 	public void onSavePlayerData(SaveToFile e) {
 		PlayerData.saveToDir(e.getPlayerDirectory());
+		BetterForgeChat.LOGGER.debug(e + "saving Player Data");
 	}
+
 	@SubscribeEvent
 	public void onLoadPlayerData(LoadFromFile e) {
 		PlayerData.loadFromDir(e.getPlayerDirectory());
+		BetterForgeChat.LOGGER.debug(e + "Loading Player Data");
 	}
 }

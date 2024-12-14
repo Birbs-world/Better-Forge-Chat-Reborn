@@ -1,7 +1,8 @@
-/build
-/bin
-/.gradle
-/.vscode
-/.idea
-/.licence
-/gradlew.bat
+/*
+!gradle.properties
+!build.gradle
+!gradlew
+!gradle
+!LICENSE
+!src/main
+!lib

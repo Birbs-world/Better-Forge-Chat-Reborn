@@ -1,5 +1,6 @@
 package com.jeremiahbl.bfcrmod;
 
+
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -29,7 +30,7 @@ public final class TextFormatter {
 	public static final String COLOR_LIGHT_PURPLE = "&d";
 	public static final String COLOR_YELLOW =       "&e";
 	public static final String COLOR_WHITE =        "&f";
-	
+
 	public static MutableComponent stringToFormattedText(String msg) {
 		return stringToFormattedText(msg, true, true);
 	}
@@ -37,7 +38,7 @@ public final class TextFormatter {
 		if(msg == null) return null;
 		MutableComponent newMsg = Component.empty();
 		boolean nextIsStyle = false;
-		String curStr = "";
+		StringBuilder curStr = new StringBuilder();
 		ChatFormatting curColor = ChatFormatting.WHITE;
 		byte curStyle = 0;
 		for(int i = 0; i < ((CharSequence) msg).length(); i++) {
@@ -45,25 +46,25 @@ public final class TextFormatter {
 			if(c == '&') {
 				if(nextIsStyle) {
 					nextIsStyle = false;
-					curStr += "&";
+					curStr.append("&");
 				} else nextIsStyle = true;
 			} else if(nextIsStyle) {
-				MutableComponent tmp = BitwiseStyling.makeEncapsulatingTextComponent(curStr, enableStyles ? curStyle : 0);
+				MutableComponent tmp = BitwiseStyling.makeEncapsulatingTextComponent(curStr.toString(), enableStyles ? curStyle : 0);
 				tmp.withStyle(curColor);
 				newMsg.append(tmp);
 				if(enableColors)
 					curColor = getColor(c, curColor);
-				curStr = "";
+				curStr = new StringBuilder();
 
 				if(c == 'r') {
 					curColor = ChatFormatting.WHITE;
 					curStyle = 0;
 				} else curStyle |= BitwiseStyling.getStyleBit(c);
 				nextIsStyle = false;
-			} else curStr += c;
+			} else curStr.append(c);
 		}
 		if(!curStr.isEmpty()) {
-			MutableComponent tmp = BitwiseStyling.makeEncapsulatingTextComponent(curStr, enableStyles ? curStyle : 0);
+			MutableComponent tmp = BitwiseStyling.makeEncapsulatingTextComponent(curStr.toString(), enableStyles ? curStyle : 0);
 			tmp.withStyle(curColor);
 			newMsg.append(tmp);
 		}
@@ -71,26 +72,27 @@ public final class TextFormatter {
 	}
 	public static String removeTextFormatting(String msg) {
 		if(msg == null) return null;
-		String newMsg = "", curStr = "";
-		boolean nextIsStyle = false;
+		StringBuilder newMsg = new StringBuilder();
+        StringBuilder curStr = new StringBuilder();
+        boolean nextIsStyle = false;
 		for(int i = 0; i < msg.length(); i++) {
 			char c = msg.charAt(i);
 			if(c == '&') {
 				if(nextIsStyle) {
 					nextIsStyle = false;
-					curStr += "&";
+					curStr.append("&");
 				} else nextIsStyle = true;
 			} else if(nextIsStyle) {
 				if(isColorOrStyle(c)) {
-					newMsg += curStr;
-					curStr = "";
-				} else curStr += ("&" + c);
+					newMsg.append(curStr);
+					curStr = new StringBuilder();
+				} else curStr.append("&").append(c);
 				nextIsStyle = false;
-			} else curStr += c;
+			} else curStr.append(c);
 		}
 		if(!curStr.isEmpty())
-			newMsg += curStr;
-		return newMsg;
+			newMsg.append(curStr);
+		return newMsg.toString();
 	}
 
 	public static boolean messageContainsColorsOrStyles(String msg, boolean checkColors) {
@@ -131,8 +133,7 @@ public final class TextFormatter {
                 case 'c' -> ChatFormatting.RED;
                 case 'd' -> ChatFormatting.LIGHT_PURPLE;
                 case 'e' -> ChatFormatting.YELLOW;
-                case 'f' -> ChatFormatting.WHITE;
-                case 'r' -> ChatFormatting.WHITE;
+                case 'f', 'r' -> ChatFormatting.WHITE;
                 default -> cur;
             }; // Reset
     }
