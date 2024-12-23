@@ -29,7 +29,7 @@ public class PlayerData {
 		dat.nickname = nickName;
 		map.put(uuid, dat);
 	}
-	public static String getNickname(UUID id) {
+	public static String getNickname(int id) {
 		PlayerData dat = map.get(id);
 		return dat == null ? null : dat.nickname;
 	}

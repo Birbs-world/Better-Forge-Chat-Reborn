@@ -14,10 +14,10 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.SharedSuggestionProvider;
-import net.minecraftforge.server.permission.nodes.PermissionNode;
+import net.neoforged.neoforge.server.permission.nodes.PermissionNode;
 
 public class BfcCommands {
-	private static final Iterable<String> bfcrmodSubCommands = Arrays.asList(new String[] { 
+	private static final Iterable<String> bfcrmodSubCommands = Arrays.asList(new String[] {
 			"info", "colors", "test"
 	});
 	
@@ -42,11 +42,11 @@ public class BfcCommands {
 				return checkPermission(c, PermissionsHandler.bfcrmodCommand);
 			}).then(Commands.argument("mode", StringArgumentType.greedyString())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggest(bfcrmodSubCommands, builder))
-					.executes(ctx -> modCommand(ctx))));
+					.executes(BfcCommands::modCommand)));
 		if(ConfigHandler.config.enableColorsCommand.get()) {
 			disp.register(Commands.literal("colors").requires((c) -> {
 					return checkPermission(c, PermissionsHandler.coloredChatNode);
-				}).executes(ctx -> colorCommand(ctx)));
+				}).executes(BfcCommands::colorCommand));
 		}
 		NickCommands.register(disp);
 	}

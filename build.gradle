@@ -21,6 +21,9 @@ group = mod_group_id
 repositories {
     mavenLocal()
     mavenCentral()
+    flatDir {
+        dir 'lib'
+    }
 }
 
 base {
@@ -56,10 +59,12 @@ runs {
     client {
         // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        workingDirectory 'runClient'
     }
 
     server {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        workingDirectory 'runServer'
         argument '--nogui'
     }
 
@@ -68,6 +73,7 @@ runs {
     // The gametest system is also enabled by default for other run configs under the /test command.
     gameTestServer {
         systemProperty 'forge.enabledGameTestNamespaces', project.mod_id
+        workingDirectory 'runTestServer'
     }
 
     data {
@@ -98,7 +104,6 @@ dependencies {
     // And its provides the option to then use net.minecraft as the group, and one of; client, server or joined as the module name, plus the game version as version.
     // For all intends and purposes: You can treat this dependency as if it is a normal library you would use.
     implementation "net.neoforged:neoforge:${neo_version}"
-    compileOnly 'net.luckperms:api:5.4'
 
     // Example optional mod dependency with JEI
     // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
@@ -106,14 +111,17 @@ dependencies {
     // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
     // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
     // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
-
+    compileOnly "ftbessentials:ftb-essentials-neoforge-2101.1.0"
+    compileOnly 'net.luckperms:api:5.4'
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"
     // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
 
     // Example mod dependency using a file as dependency
-    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
+    localRuntime files("libs")
+
+
 
     // Example project dependency using a sister or child project:
     // implementation project(":myproject")

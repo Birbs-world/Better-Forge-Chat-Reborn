@@ -8,7 +8,6 @@ import com.rvt.bfcrmod.TextFormatter;
 import com.rvt.bfcrmod.config.ConfigHandler;
 import com.rvt.bfcrmod.config.PermissionsHandler;
 import com.rvt.bfcrmod.config.PlayerData;
-import com.mojang.authlib.GameProfile;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -18,7 +17,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class NickCommands {
 	private static boolean cfgWhoIsEnabled = false;
@@ -36,7 +36,7 @@ public class NickCommands {
 			minNicknameLength = maxNicknameLength;
 			maxNicknameLength = oldMin;
 			BetterForgeChat.LOGGER.warn("Minimum nickname length was greater then maximum, swapped vales");
-			BetterForgeChat.LOGGER.warn(minNicknameLength + " < nickname.length() < " + maxNicknameLength);
+            BetterForgeChat.LOGGER.warn("{} < nickname.length() < {}", minNicknameLength, maxNicknameLength);
 		}
 		cfgWhoIsEnabled = ConfigHandler.config.enableWhoisCommand.get();
 		cfgNickEnabled = ConfigHandler.config.enableChatNicknameCommand.get();
@@ -76,14 +76,14 @@ public class NickCommands {
 				.executes(NickCommands::whoisCommand)));
 	}
 
-	private static GameProfile lookupGameProfile(String user) {
+	private static Player lookupPlayer(String user) {
 		MinecraftServer serv = ServerLifecycleHooks.getCurrentServer();
 		if(serv != null) {
 			user = user.trim().toLowerCase();
 			List<ServerPlayer> players = serv.getPlayerList().getPlayers();
 			for(ServerPlayer player : players) {
-				GameProfile prof = player.getGameProfile();
-                String uname = prof.getName().trim().toLowerCase();
+				Player prof = player;
+                String uname = prof.getName().getContents().toString().toLowerCase();
                 if(user.equals(uname)) return prof;
                 String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(prof).trim().toLowerCase();
                 if(user.equals(TextFormatter.removeTextFormatting(nname))) return prof;
@@ -93,7 +93,7 @@ public class NickCommands {
 	}
 	private static int whoisCommand(CommandContext<CommandSourceStack> ctx) {
 		String user = StringArgumentType.getString(ctx, "displayname");
-		GameProfile prof = lookupGameProfile(user);
+		Player prof = lookupPlayer(user);
 		if(prof != null) {
 			ctx.getSource().sendSuccess(()->TextFormatter.stringToFormattedText("&eFound a name matching " + user + ": \"" + prof.getName() + "\"\n&eUUID: " + prof.getId() + "&r"), false);
 			return 1;
@@ -130,9 +130,9 @@ public class NickCommands {
 			return assignNickname(ctx, player.getUUID(), nick);
 		/* /nickfor <user> OR /nickfor <user> <nickname> */
 		if(user != null) {
-			GameProfile prof = lookupGameProfile(user);
+			Player prof = lookupPlayer(user);
 			if(prof != null) {
-				return assignNickname(ctx, prof.getId(), nick);
+				return assignNickname(ctx, prof.getUUID() , nick);
 			} else {
 				ctx.getSource().sendFailure(TextFormatter.stringToFormattedText("&cUnknown player: \"" + user + "\"!&r"));
 				return 0;

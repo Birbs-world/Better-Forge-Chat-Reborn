@@ -7,11 +7,11 @@ import com.rvt.bfcrmod.utils.IntegratedNicknameProvider;
 import com.rvt.bfcrmod.utils.moddeps.FTBNicknameProvider;
 import com.rvt.bfcrmod.utils.moddeps.LuckPermsProvider;
 
-import net.minecraftforge.event.server.ServerStartedEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLEnvironment;
 
 @EventBusSubscriber
 public class ExternalModLoadingEvent {
@@ -23,7 +23,6 @@ public class ExternalModLoadingEvent {
 	}
 	/*private void loadDiscordIntegration() {
 		if(ConfigHandler.config.enableDiscordBotIntegration.get()) {
-			
 		}
 	}*/
 	private void loadIntegratedNicknameProvider() {
@@ -37,7 +36,7 @@ public class ExternalModLoadingEvent {
 	private void loadLuckPerms() {
 		
 		if(FMLEnvironment.dist.isDedicatedServer()) {
-			BetterForgeChat.LOGGER.info("Detected loaded status of luckperms is :" + ModList.get().isLoaded("luckperms"));
+            BetterForgeChat.LOGGER.info("Detected loaded status of luckperms is :{}", ModList.get().isLoaded("luckperms"));
 			if(ModList.get().isLoaded("luckperms")) {
 
 				if (!ConfigHandler.config.enableLuckPerms.get()) {
@@ -63,7 +62,7 @@ public class ExternalModLoadingEvent {
 		}
 	}
 	private void loadFtbEssentials() {
-		BetterForgeChat.LOGGER.info("Detected forge loaded status of FTB Essentials is :" + ModList.get().isLoaded("ftbessentials"));
+        BetterForgeChat.LOGGER.info("Detected forge loaded status of FTB Essentials is :{}", ModList.get().isLoaded("ftbessentials"));
 		if(ModList.get().isLoaded("ftbessentials")) {
 			if (!ConfigHandler.config.enableFtbEssentials.get()) {
 				BetterForgeChat.LOGGER.info("FTB Essentials integration was skipped by configuration file!");

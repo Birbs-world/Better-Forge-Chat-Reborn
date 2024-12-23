@@ -19,9 +19,10 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
 import net.minecraft.network.chat.contents.TranslatableContents;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.ServerChatEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
 public class ChatEventHandler implements IReloadable {
@@ -56,8 +57,8 @@ public class ChatEventHandler implements IReloadable {
     public void onServerChat(ServerChatEvent e) {
 		if(!loaded) return; // Just do nothing until everything's ready to go!
     	ServerPlayer player = e.getPlayer();
-        GameProfile profile = player.getGameProfile();
-    	UUID uuid = profile.getId();
+        Player profile = player;
+    	UUID uuid = profile.getUUID();
 		if(e == null || player == null) return;
         String msg = e.getMessage().getString();
 		if(msg == null || (msg).isEmpty()) return;

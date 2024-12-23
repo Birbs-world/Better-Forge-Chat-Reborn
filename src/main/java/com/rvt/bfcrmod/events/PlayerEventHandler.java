@@ -5,15 +5,17 @@ import com.rvt.bfcrmod.config.IReloadable;
 import com.rvt.bfcrmod.config.PermissionsHandler;
 import com.rvt.bfcrmod.config.PlayerData;
 import com.rvt.bfcrmod.utils.BetterForgeChatUtilities;
-import com.mojang.authlib.GameProfile;
+import com.rvt.bfcrmod.BetterForgeChat;
 
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.event.entity.player.PlayerEvent.LoadFromFile;
-import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
-import net.minecraftforge.event.entity.player.PlayerEvent.SaveToFile;
-import net.minecraftforge.event.entity.player.PlayerEvent.TabListNameFormat;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+
+import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.LoadFromFile;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.NameFormat;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.SaveToFile;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.TabListNameFormat;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
 public class PlayerEventHandler implements IReloadable {
@@ -29,16 +31,18 @@ public class PlayerEventHandler implements IReloadable {
 	@SubscribeEvent
 	public void onTabListNameFormatEvent(TabListNameFormat e) { 
 		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() != null && e.getEntity() instanceof ServerPlayer) {
-			GameProfile player = e.getEntity().getGameProfile();
-			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player, 
-				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getId(), PermissionsHandler.tabListNicknameNode),  
-				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getId(), PermissionsHandler.tabListMetadataNode)));
+			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
+			Player player = e.getEntity();
+			BetterForgeChat.LOGGER.debug("Tablist formatting for: "+ player);
+			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player,
+				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListNicknameNode),
+				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListMetadataNode)));
 		}
 	}
 	@SubscribeEvent
 	public void onNameFormatEvent(NameFormat e) {
 		if(e.getEntity() != null && e.getEntity() instanceof ServerPlayer)
-			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity().getGameProfile()));
+			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity()));
 	}
 	@SubscribeEvent
 	public void onSavePlayerData(SaveToFile e) {

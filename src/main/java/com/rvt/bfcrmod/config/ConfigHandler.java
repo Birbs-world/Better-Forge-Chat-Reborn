@@ -1,35 +1,35 @@
 package com.rvt.bfcrmod.config;
 
-import net.minecraftforge.common.ForgeConfigSpec;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 public class ConfigHandler {
-	private static final ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+	private static final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 	public static final ConfigBuilder config = new ConfigBuilder(builder);
-	public static ForgeConfigSpec spec = builder.build();
+	public static ModConfigSpec spec = builder.build();
 	
 	public static class ConfigBuilder {
-		public final ForgeConfigSpec.ConfigValue<String> playerNameFormat;
-		public final ForgeConfigSpec.ConfigValue<String> chatMessageFormat;
-		public final ForgeConfigSpec.ConfigValue<String> timestampFormat;
-		public final ForgeConfigSpec.ConfigValue<String> discordBotToken;
+		public final ModConfigSpec.ConfigValue<String> playerNameFormat;
+		public final ModConfigSpec.ConfigValue<String> chatMessageFormat;
+		public final ModConfigSpec.ConfigValue<String> timestampFormat;
+		public final ModConfigSpec.ConfigValue<String> discordBotToken;
 
-		public final ForgeConfigSpec.ConfigValue<Integer> maximumNicknameLength;
-		public final ForgeConfigSpec.ConfigValue<Integer> minimumNicknameLength;
+		public final ModConfigSpec.ConfigValue<Integer> maximumNicknameLength;
+		public final ModConfigSpec.ConfigValue<Integer> minimumNicknameLength;
 		
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableTimestamp;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableFtbEssentials;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableLuckPerms;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableMarkdown;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableColorsCommand;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableTabListIntegration;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableMetadataInTabList;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableNicknamesInTabList;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableWhoisCommand;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableChatNicknameCommand;
-		public final ForgeConfigSpec.ConfigValue<Boolean> autoEnableChatNicknameCommand;
-		public final ForgeConfigSpec.ConfigValue<Boolean> enableDiscordBotIntegration;
+		public final ModConfigSpec.ConfigValue<Boolean> enableTimestamp;
+		public final ModConfigSpec.ConfigValue<Boolean> enableFtbEssentials;
+		public final ModConfigSpec.ConfigValue<Boolean> enableLuckPerms;
+		public final ModConfigSpec.ConfigValue<Boolean> enableMarkdown;
+		public final ModConfigSpec.ConfigValue<Boolean> enableColorsCommand;
+		public final ModConfigSpec.ConfigValue<Boolean> enableTabListIntegration;
+		public final ModConfigSpec.ConfigValue<Boolean> enableMetadataInTabList;
+		public final ModConfigSpec.ConfigValue<Boolean> enableNicknamesInTabList;
+		public final ModConfigSpec.ConfigValue<Boolean> enableWhoisCommand;
+		public final ModConfigSpec.ConfigValue<Boolean> enableChatNicknameCommand;
+		public final ModConfigSpec.ConfigValue<Boolean> autoEnableChatNicknameCommand;
+		//public final ModConfigSpec.ConfigValue<Boolean> enableDiscordBotIntegration;
 		
-		public ConfigBuilder(ForgeConfigSpec.Builder builder) {
+		public ConfigBuilder(ModConfigSpec.Builder builder) {
 			builder.push("BetterForgeChatModConfig");
 			playerNameFormat = builder
 					.comment("  Controls the chat message format",
@@ -62,7 +62,7 @@ public class ConfigHandler {
 			enableChatNicknameCommand = builder.comment(
 					  "  Enables or disables the integrated nickname command"
 					+ "   (If autoIntegratedNicknames is true, this setting is ignored) ").define("enableIntegratedNicknames", false);
-			enableDiscordBotIntegration = builder.comment("  Enables or disables discord integration").define("enableDiscordIntegraation", false);
+			//enableDiscordBotIntegration = builder.comment("  Enables or disables discord integration").define("enableDiscordIntegraation", false);
 			autoEnableChatNicknameCommand = builder.comment("  When true, enables the integrated nickname-related commands if FTB essentials is not present").define("autoIntegratedNicknames", true);
 			maximumNicknameLength = builder.comment("  Maximum allowed nickname length (for integrated nickname commands)").defineInRange("maximumNicknameLength", 50, 1, 500);
 			minimumNicknameLength = builder.comment("  Minimum allowed nickname length (for integrated nickname commands)").defineInRange("minimumNicknameLength", 1, 1, 500);
