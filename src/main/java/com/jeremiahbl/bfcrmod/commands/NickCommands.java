@@ -35,7 +35,7 @@ public class NickCommands {
 			int oldMin = minNicknameLength;
 			minNicknameLength = maxNicknameLength;
 			maxNicknameLength = oldMin;
-			BetterForgeChat.LOGGER.warn("Minimum nickname length was greater then maximum, swapped vales");
+			BetterForgeChat.LOGGER.warn("Minimum nickname length was greater then maximum, swapped values");
 			BetterForgeChat.LOGGER.warn(minNicknameLength + " < nickname.length() < " + maxNicknameLength);
 		}
 		cfgWhoIsEnabled = ConfigHandler.config.enableWhoisCommand.get();
