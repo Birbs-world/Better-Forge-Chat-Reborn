@@ -1,12 +1,13 @@
 package com.jeremiahbl.bfcrmod.utils;
 
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.IExtensionPoint;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.IConfigSpec;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.network.NetworkConstants;
-import net.minecraftforge.common.MinecraftForge;
 
+@SuppressWarnings("removal")
 public class loader {
 
     static ModLoadingContext mlc = ModLoadingContext.get(); // Get the mod loading context (useful for doing stuff)
