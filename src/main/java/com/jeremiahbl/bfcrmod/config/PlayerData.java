@@ -4,10 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 import com.jeremiahbl.bfcrmod.BetterForgeChat;
 
@@ -28,6 +25,7 @@ public class PlayerData {
 			dat = new PlayerData(uuid);
 		dat.nickname = nickName;
 		map.put(uuid, dat);
+		BetterForgeChat.LOGGER.debug("adding {} to map",dat);
 	}
 	public static String getNickname(UUID id) {
 		PlayerData dat = map.get(id);
@@ -44,59 +42,100 @@ public class PlayerData {
 		out += "\tNickname: " + encodeStr(nickname) + '\n';
 		return out;
 	}
-	public static PlayerData fromString(String str) {
+	public static ArrayList<PlayerData> fromString(String str) {
 		if(str == null) return null;
-		String[] strs = str.trim().split("\n");
-		for(int i = 0; i < strs.length; i++)
-			strs[i] = strs[i].trim();
+		String[] strs = (str.trim().split("\n"));
+		ArrayList<PlayerData> out = new ArrayList<PlayerData>();
+		BetterForgeChat.LOGGER.debug("map string array: \n{}", (Object[]) strs);
+		BetterForgeChat.LOGGER.debug("string array length: {}",strs.length);
+
 		if(strs.length > 2 && strs[0].contentEquals("[PlayerDataEntry]")) {
-			UUID uuid = null;
-			String nick = null;
-			for(int i = 1; i < strs.length; i++) {
-				String[] prs = strs[i].split(":");
-				for(int j = 0; j < prs.length; j++)
-					prs[j] = prs[j].trim();
+			for(int data = 1; data < strs.length; data ++) {
+				BetterForgeChat.LOGGER.debug("data number {}",data);
+				BetterForgeChat.LOGGER.debug("data pairs: {}", strs[data]);
+				UUID uuid = null;
+				String nick = null;
+
+				String[] pairs = strs[data].trim().split(":");
+				BetterForgeChat.LOGGER.debug("processing UUID pair: {}", (Object) pairs);
+				pairs[0] = pairs[0].trim();
 				try {
-					if(prs[0].contentEquals("UUID"))
-						uuid = UUID.fromString(decodeStr(prs[1]));
-					else if(prs[0].contentEquals("Nickname"))
-						nick = decodeStr(prs[1]);
-				} catch(NullPointerException npe) {
-					BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \"" + strs[i] + "\"");
+					if (pairs[0].contentEquals("UUID")){
+						uuid = UUID.fromString(decodeStr(pairs[1]));
+						pairs = strs[data+1].trim().split(":");
+						pairs[1] = pairs[1].trim();
+						BetterForgeChat.LOGGER.debug("processing Nickname pair: {}", (Object) pairs);
+						if (pairs[0].contentEquals("Nickname"))
+							nick = decodeStr(pairs[1]);
+						}
+					} catch (NullPointerException npe) {
+						BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \"" + strs[data] + "\"");
+					}
+
+				if(uuid != null) {
+					PlayerData player = new PlayerData(uuid);
+					player.nickname = nick;
+					BetterForgeChat.LOGGER.debug("adding player to map: {}",player);
+					out.add(player);
+					data++;
 				}
+				BetterForgeChat.LOGGER.debug("new data number {}",data);
 			}
-			if(uuid != null) {
-				PlayerData out = new PlayerData(uuid);
-				out.nickname = nick;
-				return out;
-			} else return null;
+
+
 		} else return null;
-	}
-	public static void loadFromDir(File playerDirectory) {
+        return out;
+    }
+
+
+	public static void loadFromDir(File playerDirectory){
 		File dataFile = new File(playerDirectory, playerDataFileName);
 		try {
 			FileInputStream fis = new FileInputStream(dataFile);
-			Scanner scn = new Scanner(fis).useDelimiter("[PlayerDataEntry]\n");
-			while(scn.hasNext()) {
+			String Input = new String(fis.readAllBytes());
+			BetterForgeChat.LOGGER.debug("Current open file content: \n {}",Input);
+			ArrayList<PlayerData> playerlist = PlayerData.fromString(Input);
+			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist);
+			for(int player =0;player < playerlist.size();player++) {
+				PlayerData pdata = playerlist.get(0);
+				if (pdata != null) {
+					map.put(pdata.uuid, pdata);
+					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
+				} else {
+					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData", pdata);
+				}
+			}
+			/*
+			Scanner scn = new Scanner(Input).useDelimiter("[PlayerDataEntry]\n");
+			while (scn.hasNext()){
 				PlayerData pdat = PlayerData.fromString(scn.next());
-				if(pdat != null) map.put(pdat.uuid, pdat);
+				if(pdat != null){
+                    map.put(pdat.uuid, pdat);
+					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData",pdat);
+                }else{
+					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData",pdat);
+				}
 			}
 			scn.close();
 			fis.close();
+			*/
 		} catch(IOException ioe) {
-			BetterForgeChat.LOGGER.error("Failed to save " + dataFile.getAbsolutePath());
+            BetterForgeChat.LOGGER.error("Failed to load {}", dataFile.getAbsolutePath());
 		}
 	}
 	public static void saveToDir(File playerDirectory) {
+		BetterForgeChat.LOGGER.debug("current playerdata map: {}",map);
 		File dataFile = new File(playerDirectory, playerDataFileName);
 		try {
 			FileOutputStream fos = new FileOutputStream(dataFile);
 			for(PlayerData dat : map.values())
-				if(dat != null)
-					fos.write(dat.toString().getBytes());
+				if(dat != null) {
+                    fos.write(dat.toString().getBytes());
+					BetterForgeChat.LOGGER.debug("saved player data \n {} to bfcr.player Data",dat);
+                }
 			fos.close();
 		} catch(IOException ioe) {
-			BetterForgeChat.LOGGER.error("Failed to save " + dataFile.getAbsolutePath());
+            BetterForgeChat.LOGGER.error("Failed to save {}", dataFile.getAbsolutePath());
 		}
 	}
 	public static String encodeStr(String str) {

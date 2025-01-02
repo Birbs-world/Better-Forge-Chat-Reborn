@@ -16,6 +16,8 @@ import net.minecraftforge.event.entity.player.PlayerEvent.TabListNameFormat;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
+import java.io.IOException;
+
 @EventBusSubscriber
 public class PlayerEventHandler implements IReloadable {
 	private boolean enableNicknamesInTabList = false;
@@ -48,13 +50,13 @@ public class PlayerEventHandler implements IReloadable {
 
 	@SubscribeEvent
 	public void onSavePlayerData(SaveToFile e) {
+		BetterForgeChat.LOGGER.debug("saving all Player Data");
 		PlayerData.saveToDir(e.getPlayerDirectory());
-		BetterForgeChat.LOGGER.debug(e + "saving Player Data");
 	}
 
 	@SubscribeEvent
-	public void onLoadPlayerData(LoadFromFile e) {
+	public void onLoadPlayerData(LoadFromFile e){
+		BetterForgeChat.LOGGER.debug("Loading all Player Data");
 		PlayerData.loadFromDir(e.getPlayerDirectory());
-		BetterForgeChat.LOGGER.debug(e + "Loading Player Data");
 	}
 }

@@ -49,8 +49,8 @@ public class PermissionsHandler {
 			if(fld.getType() == PermissionNode.class) {
 				try { // Fuck adding all these nodes manually
 					pge.addNodes((PermissionNode<?>) fld.get(PermissionNode.class));
-				} catch (Exception e) {
-					BetterForgeChat.LOGGER.error("Exception: "+ e + " Caught on adding permission nodes");
+				} catch (Exception error) {
+                    BetterForgeChat.LOGGER.trace("Exception: Caught on adding permission nodes", error);
 				}
 			}
 		}
@@ -64,13 +64,13 @@ public class PermissionsHandler {
 	}
 
 	public static boolean playerHasPermission(UUID uuid, PermissionNode<Boolean> node) {
-		Boolean bool = false;
+		boolean bool = false;
 		try {
 			bool = PermissionAPI.getOfflinePermission(uuid, node, new PermissionDynamicContext[0]);
 			//bool = PermissionAPI.getPermission(player, node, new PermissionDynamicContext[0]);
 		} catch(IllegalStateException ise) {
-			BetterForgeChat.LOGGER.info("IllegalStateException when getting player tab list permissions, assuming false");
+			BetterForgeChat.LOGGER.trace("IllegalStateException when getting player tab list permissions, assuming false",ise);
 		}
-		return bool == null ? false : bool;
+		return bool;
 	}
 }
