@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -21,5 +21,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build with Gradle
+      - name:  Set Gradlew as Executable
         run: ./gradlew build
+
+      - name: Build with Gradle
+        run: chmod +x ./gradlew
