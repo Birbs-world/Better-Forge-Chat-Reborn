@@ -22,4 +22,9 @@ public class FTBNicknameProvider implements INicknameProvider {
 		return "FTB Essentials";
 	}
 
+	@Override
+	public String getPlayerNickname(GameProfile player) {
+		return "";
+	}
+
 }

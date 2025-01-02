@@ -45,7 +45,7 @@ public class PermissionsHandler {
 	public static PermissionNode<Boolean> nickOthersCommand = 
 			ezyPermission("commands.nick.others", "Modify nicknames", "Enables/Disables the \"/nick <username> <nickname>\" command");
 	
-	@SubscribeEvent public void registerPermissionNodes(Nodes pge) {
+	@SubscribeEvent public static void registerPermissionNodes(Nodes pge) {
 		for(Field fld : PermissionsHandler.class.getDeclaredFields()) {
 			if(fld.getType() == PermissionNode.class) {
 				try { // Fuck adding all these nodes manually

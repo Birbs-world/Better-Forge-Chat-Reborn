@@ -19,8 +19,8 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
 public class PlayerEventHandler implements IReloadable {
-	private boolean enableNicknamesInTabList = false;
-	private boolean enableMetadataInTabList = false;
+	private static boolean enableNicknamesInTabList = false;
+	private static boolean enableMetadataInTabList = false;
 	
         @Override
 	public void reloadConfigOptions() {
@@ -29,27 +29,27 @@ public class PlayerEventHandler implements IReloadable {
 	}
 	
 	@SubscribeEvent
-	public void onTabListNameFormatEvent(TabListNameFormat e) { 
+	public static void onTabListNameFormatEvent(TabListNameFormat e) {
 		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() != null && e.getEntity() instanceof ServerPlayer) {
 			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
 			Player player = e.getEntity();
 			BetterForgeChat.LOGGER.debug("Tablist formatting for: "+ player);
-			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player,
+			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player.getGameProfile(),
 				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListNicknameNode),
 				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListMetadataNode)));
 		}
 	}
 	@SubscribeEvent
-	public void onNameFormatEvent(NameFormat e) {
+	public static void onNameFormatEvent(NameFormat e) {
 		if(e.getEntity() != null && e.getEntity() instanceof ServerPlayer)
-			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity()));
+			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity().getGameProfile()));
 	}
 	@SubscribeEvent
-	public void onSavePlayerData(SaveToFile e) {
+	public static void onSavePlayerData(SaveToFile e) {
 		PlayerData.saveToDir(e.getPlayerDirectory());
 	}
 	@SubscribeEvent
-	public void onLoadPlayerData(LoadFromFile e) {
+	public static void onLoadPlayerData(LoadFromFile e) {
 		PlayerData.loadFromDir(e.getPlayerDirectory());
 	}
 }

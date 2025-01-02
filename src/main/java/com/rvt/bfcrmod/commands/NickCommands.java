@@ -85,7 +85,7 @@ public class NickCommands {
 				Player prof = player;
                 String uname = prof.getName().getContents().toString().toLowerCase();
                 if(user.equals(uname)) return prof;
-                String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(prof).trim().toLowerCase();
+                String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(prof.getGameProfile()).trim().toLowerCase();
                 if(user.equals(TextFormatter.removeTextFormatting(nname))) return prof;
             }
 		}

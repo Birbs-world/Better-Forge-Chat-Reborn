@@ -16,12 +16,10 @@ import com.rvt.bfcrmod.utils.INicknameProvider;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLLoadCompleteEvent;
-import net.neoforged.fml.event.lifecycle.ModLifecycleEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 
@@ -29,9 +27,9 @@ import org.slf4j.Logger;
 @Mod(BetterForgeChat.MODID )
 public class BetterForgeChat {
 	public static final String CHAT_ID_STR = 
-			"&cBetter &9&lForge&r &eChat&r &d(c) Jeremiah Lowe, Disa Kandria 2022-2024&r\n";
+			"&cBetter &9&lForge&r &eChat&r &d(c)Disa Kandria, Jeremiah Lowe 2022-2024&r\n";
 	public static final String MODID = "bfcrmod";
-	public static final String VERSION = "V1.0.3";
+	public static final String VERSION = "V2.0.0-Alpha";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BetterForgeChat instance;
 	
@@ -39,30 +37,27 @@ public class BetterForgeChat {
     public INicknameProvider nicknameProvider = null;
 
     ChatEventHandler chatHandler = new ChatEventHandler();
-    ExternalModLoadingEvent modLoadingEvent = new ExternalModLoadingEvent();
     PlayerEventHandler playerEventHandler = new PlayerEventHandler();
+    ConfigurationEventHandler configurationHandler = new ConfigurationEventHandler();
+    //PermissionsHandler permissionsHandler = new PermissionsHandler();
+    //CommandRegistrationHandler commandRegistrator = new CommandRegistrationHandler();
 
     public BetterForgeChat(IEventBus modBus, ModContainer container) {
     	instance = this;
     	// Register reloadable configuration stuff (reduce some things subscribed to the event bus)
-        ConfigurationEventHandler configurationHandler = new ConfigurationEventHandler();
-        PermissionsHandler permissionsHandler = new PermissionsHandler();
-        CommandRegistrationHandler commandRegistrator = new CommandRegistrationHandler();
-
         configurationHandler.registerReloadable(playerEventHandler);
     	configurationHandler.registerReloadable(chatHandler);
     	configurationHandler.registerReloadable(() -> {
     		NickCommands.reloadConfig();
     		BetterForgeChatUtilities.reloadConfig();
     	});
-    	configurationHandler.registerReloadable(() -> BetterForgeChat.LOGGER.info("Configuration options loaded!"));
 
         modBus.addListener(configurationHandler::onModConfigReloadingEvent);
         NeoForge.EVENT_BUS.addListener(configurationHandler::onServerStarted);
 
         container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);//set config type and config to register
 
-        NeoForge.EVENT_BUS.register(permissionsHandler); //register permissions handle
+        NeoForge.EVENT_BUS.register(PermissionsHandler.class); //register permissions handler
 
 
         // Register server chat event
@@ -75,21 +70,22 @@ public class BetterForgeChat {
 
         // Register mod loading completed event
         modBus.addListener(this::loadComplete);
-        NeoForge.EVENT_BUS.register(this); // Register the mod itself
+        modBus.register(this);
+        //NeoForge.EVENT_BUS.register(this); // Register the mod itself
 
-        NeoForge.EVENT_BUS.register(commandRegistrator); // Register commands
+        NeoForge.EVENT_BUS.register(CommandRegistrationHandler.class); // Register commands
 
     }
 
     @SubscribeEvent
     private void loadComplete(FMLLoadCompleteEvent e) {
     	// Register server chat event
-    	NeoForge.EVENT_BUS.register(chatHandler);
+    	NeoForge.EVENT_BUS.register(ChatEventHandler.class);
     	// Register permissions mod API checking on server start
-        NeoForge.EVENT_BUS.register(modLoadingEvent);
+        NeoForge.EVENT_BUS.register(ExternalModLoadingEvent.class);
     	// Register player events (NameFormat and TabListNameFormat)
-        NeoForge.EVENT_BUS.register(playerEventHandler);
+        NeoForge.EVENT_BUS.register(PlayerEventHandler.class);
         // Final mod loading completion message
-    	LOGGER.info("Mod loaded up and ready to go! (c) Jeremiah Lowe, Disa Kandria 2022 - 2024!");
+    	LOGGER.info("Mod loaded up and ready to go! (c) Disa Kandria 2024!");
     }
 }

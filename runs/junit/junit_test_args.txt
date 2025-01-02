@@ -1,7 +1,7 @@
 --launchTarget
 forgejunituserdev
 --version
-21.0.167
+21.1.89
 --assetIndex
 asset-index
 --assetsDir
@@ -9,10 +9,10 @@ C:\Users\Disa Frihet\.gradle\caches\minecraft\assets
 --gameDir
 .
 --fml.neoForgeVersion
-21.0.167
+21.1.89
 --fml.fmlVersion
-4.0.23
+4.0.34
 --fml.mcVersion
-1.21
+1.21.1
 --fml.neoFormVersion
-20240613.152323
+20240808.144430

@@ -9,7 +9,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 @EventBusSubscriber
 public class CommandRegistrationHandler {
 	@SubscribeEvent
-	public void registerCommands(RegisterCommandsEvent e) {
+	public static void registerCommands(RegisterCommandsEvent e) {
 		BfcCommands.register(e.getDispatcher());
 	}
 }

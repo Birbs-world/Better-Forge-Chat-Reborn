@@ -1,0 +1,44 @@
+[BetterForgeChatModConfig]
+	#  Controls the chat message format
+	#    $prefix is replaced by the user's prefix or nothing if the user has no prefix
+	#    $suffix is replaced by the user's suffix or nothing if the user has no suffix
+	#    $name is replaced by the user's name, or nickname if they have one
+	playerNameFormat = "$prefix$name$suffix"
+	#  Controls the chat message format
+	#    $time is replaced by the timestamp field or nothing if disabled
+	#    $name is replaced by the user's name, or nickname if they have one
+	#    $msg is replaced by the username's message (if you use it more then once it WILL break this mod)
+	chatMessageFormat = "$time | $name: $msg"
+	#  Timestamp format following the java SimpleDateFormat
+	#    Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html
+	timestampFormat = "HH:mm"
+	#  Discord bot token for discord integration
+	discordBotToken = ""
+	#  Enables or disables the filling in of timestamps
+	enableTimestamp = true
+	#  Enables or disables FTB essentials nickname integration
+	useFtbEssentials = true
+	#  Enables or disables LuckPerms integration
+	useLuckPerms = true
+	#  Enables or disables markdown styling
+	markdownEnabled = true
+	#  Enables or disables custom tab list information
+	tabList = true
+	#  Enables or disables prefixes&suffixes in the tab list
+	tabListMetadata = true
+	#  Enables or disables nicknames in the tab list
+	tabListNicknames = true
+	#  Enables or disables the /colors command
+	enableColorsCommand = true
+	#  Enables or disables the integrated whois command    (If autoIntegratedNicknames is true, this setting is ignored) 
+	enableWhoisCommand = true
+	#  Enables or disables the integrated nickname command   (If autoIntegratedNicknames is true, this setting is ignored) 
+	enableIntegratedNicknames = false
+	#  When true, enables the integrated nickname-related commands if FTB essentials is not present
+	autoIntegratedNicknames = true
+	#  Maximum allowed nickname length (for integrated nickname commands)
+	#Range: 1 ~ 500
+	maximumNicknameLength = 50
+	#  Minimum allowed nickname length (for integrated nickname commands)
+	#Range: 1 ~ 500
+	minimumNicknameLength = 1

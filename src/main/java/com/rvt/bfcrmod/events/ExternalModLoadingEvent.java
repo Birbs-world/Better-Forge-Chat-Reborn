@@ -15,7 +15,7 @@ import net.neoforged.fml.loading.FMLEnvironment;
 
 @EventBusSubscriber
 public class ExternalModLoadingEvent {
-	@SubscribeEvent public void onServerStarted(ServerStartedEvent e) {
+	@SubscribeEvent public static void onServerStarted(ServerStartedEvent e) {
 		loadLuckPerms();
 		loadFtbEssentials();
 		loadIntegratedNicknameProvider();
@@ -25,7 +25,7 @@ public class ExternalModLoadingEvent {
 		if(ConfigHandler.config.enableDiscordBotIntegration.get()) {
 		}
 	}*/
-	private void loadIntegratedNicknameProvider() {
+	private static void loadIntegratedNicknameProvider() {
 		if (BetterForgeChat.instance.nicknameProvider == null && 
 				ConfigHandler.config.autoEnableChatNicknameCommand.get()) {
 			BetterForgeChat.instance.nicknameProvider = new IntegratedNicknameProvider();
@@ -33,7 +33,7 @@ public class ExternalModLoadingEvent {
     		BetterForgeChat.LOGGER.info("Integrated nickname management enabled successfully!");
 		}
 	}
-	private void loadLuckPerms() {
+	private static void loadLuckPerms() {
 		
 		if(FMLEnvironment.dist.isDedicatedServer()) {
             BetterForgeChat.LOGGER.info("Detected loaded status of luckperms is :{}", ModList.get().isLoaded("luckperms"));
@@ -61,26 +61,31 @@ public class ExternalModLoadingEvent {
 			BetterForgeChat.LOGGER.warn("Better Forge Chat Reborn is Running on client, Will not integrate Disabled LuckPerms API");
 		}
 	}
-	private void loadFtbEssentials() {
-        BetterForgeChat.LOGGER.info("Detected forge loaded status of FTB Essentials is :{}", ModList.get().isLoaded("ftbessentials"));
-		if(ModList.get().isLoaded("ftbessentials")) {
-			if (!ConfigHandler.config.enableFtbEssentials.get()) {
-				BetterForgeChat.LOGGER.info("FTB Essentials integration was skipped by configuration file!");
-				return;
-			}
-			BetterForgeChat.LOGGER.info("Attempting to integrate FTB Essentials!");
-			try {
-				BetterForgeChat.instance.nicknameProvider = new FTBNicknameProvider();
-				BetterForgeChat.LOGGER.info("FTB Essentials API found and integrated successfully!");
+	private static void loadFtbEssentials() {
+		BetterForgeChat.LOGGER.info("Detected forge loaded status of FTB Essentials is :{}", ModList.get().isLoaded("ftbessentials"));
+		BetterForgeChat.instance.nicknameProvider = null;
+		BetterForgeChat.LOGGER.warn("FTB Essentials (nickname) Integration is still in Development for 1.21.1");
+		BetterForgeChat.LOGGER.warn("The Built In Nickname function via /nick will be used in the interim");
 
-			} catch(Error e2) { // Could have a NoClassDefFoundError here!
-				BetterForgeChat.instance.nicknameProvider = null;
-				BetterForgeChat.LOGGER.warn("OOPS something went wrong - FTB Essentials wasn't found but the FML says its loaded, we won't use it!/nIf you see this warning please submit a issue report");
-			}
-
-    	}else {
-			BetterForgeChat.instance.nicknameProvider = null;
-			BetterForgeChat.LOGGER.warn("FTB Essentials wasn't found to be loaded, we won't use it!");
-		}
+//        BetterForgeChat.LOGGER.info("Detected forge loaded status of FTB Essentials is :{}", ModList.get().isLoaded("ftbessentials"));
+//		if(ModList.get().isLoaded("ftbessentials")) {
+//			if (!ConfigHandler.config.enableFtbEssentials.get()) {
+//				BetterForgeChat.LOGGER.info("FTB Essentials integration was skipped by configuration file!");
+//				return;
+//			}
+//			BetterForgeChat.LOGGER.info("Attempting to integrate FTB Essentials!");
+//			try {
+//				BetterForgeChat.instance.nicknameProvider = new FTBNicknameProvider();
+//				BetterForgeChat.LOGGER.info("FTB Essentials API found and integrated successfully!");
+//
+//			} catch(Error e2) { // Could have a NoClassDefFoundError here!
+//				BetterForgeChat.instance.nicknameProvider = null;
+//				BetterForgeChat.LOGGER.warn("OOPS something went wrong - FTB Essentials wasn't found but the FML says its loaded, we won't use it!/nIf you see this warning please submit a issue report");
+//			}
+//
+//    	}else {
+//			BetterForgeChat.instance.nicknameProvider = null;
+//			BetterForgeChat.LOGGER.warn("FTB Essentials wasn't found to be loaded, we won't use it!");
+//		}
 	}
 }

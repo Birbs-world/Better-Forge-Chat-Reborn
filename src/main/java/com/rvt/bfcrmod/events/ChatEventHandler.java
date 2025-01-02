@@ -26,10 +26,10 @@ import net.neoforged.fml.common.EventBusSubscriber;
 
 @EventBusSubscriber
 public class ChatEventHandler implements IReloadable {
-	private SimpleDateFormat timestampFormat = null;
-	private boolean markdownEnabled = false;
-	private String chatMessageFormat = "";
-	private boolean loaded = false;
+	private static SimpleDateFormat timestampFormat = null;
+	private static boolean markdownEnabled = false;
+	private static String chatMessageFormat = "";
+	private static boolean loaded = false;
 	
         @Override
 	public void reloadConfigOptions() {
@@ -40,7 +40,7 @@ public class ChatEventHandler implements IReloadable {
 		loaded = true;
 	}
 	
-	public Style getHoverClickEventStyle(Component old) {
+	public static Style getHoverClickEventStyle(Component old) {
 		if(old instanceof TranslatableContents tcmp) {
             Object[] args = tcmp.getArgs();
 			for(Object arg : args) {
@@ -54,7 +54,7 @@ public class ChatEventHandler implements IReloadable {
 	}
 	
 	@SubscribeEvent
-    public void onServerChat(ServerChatEvent e) {
+    public static void onServerChat(ServerChatEvent e) {
 		if(!loaded) return; // Just do nothing until everything's ready to go!
     	ServerPlayer player = e.getPlayer();
         Player profile = player;
@@ -63,7 +63,7 @@ public class ChatEventHandler implements IReloadable {
         String msg = e.getMessage().getString();
 		if(msg == null || (msg).isEmpty()) return;
 		String tstamp = timestampFormat == null ? "" : timestampFormat.format(new Date());
-		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(profile);
+		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(profile.getGameProfile());
 		String fmat = chatMessageFormat.replace("$time", tstamp).replace("$name", name);
 		MutableComponent beforeMsg = TextFormatter.stringToFormattedText(fmat.substring(0, fmat.indexOf("$msg")));
 		MutableComponent afterMsg = TextFormatter.stringToFormattedText(fmat.substring(fmat.indexOf("$msg") + 4));

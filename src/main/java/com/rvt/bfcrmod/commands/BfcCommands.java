@@ -38,7 +38,7 @@ public class BfcCommands {
 	}
 	
 	public static void register(CommandDispatcher<CommandSourceStack> disp) {
-		disp.register(Commands.literal("bfc").requires((c) -> {
+		disp.register(Commands.literal("bfcr").requires((c) -> {
 				return checkPermission(c, PermissionsHandler.bfcrmodCommand);
 			}).then(Commands.argument("mode", StringArgumentType.greedyString())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggest(bfcrmodSubCommands, builder))

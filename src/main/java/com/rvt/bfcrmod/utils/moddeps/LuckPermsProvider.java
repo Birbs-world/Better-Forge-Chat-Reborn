@@ -1,6 +1,5 @@
 package com.rvt.bfcrmod.utils.moddeps;
 
-import net.minecraft.world.entity.player.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.rvt.bfcrmod.utils.IMetadataProvider;
@@ -32,10 +31,11 @@ public class LuckPermsProvider implements IMetadataProvider {
 	}
 
         @Override
-	public String[] getPlayerPrefixAndSuffix(Player player) {
+	public String[] getPlayerPrefixAndSuffix(GameProfile player) {
 		try {
-			CachedMetaData metaData = this.getMetaData(player.getGameProfile());
-			return new String[]{metaData.getPrefix(), metaData.getSuffix()};
+			CachedMetaData metaData = this.getMetaData(player);
+            assert metaData != null;
+            return new String[]{metaData.getPrefix(), metaData.getSuffix()};
 		} catch(IllegalStateException ise) {
 			return null;
 		}
