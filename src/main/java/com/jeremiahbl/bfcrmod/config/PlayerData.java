@@ -45,7 +45,7 @@ public class PlayerData {
 	public static ArrayList<PlayerData> fromString(String str) {
 		if(str == null) return null;
 		String[] strs = (str.trim().split("\n"));
-		ArrayList<PlayerData> out = new ArrayList<PlayerData>();
+		ArrayList<PlayerData> out = new ArrayList<>();
 		BetterForgeChat.LOGGER.debug("map string array: \n{}", (Object[]) strs);
 		BetterForgeChat.LOGGER.debug("string array length: {}",strs.length);
 
@@ -69,7 +69,7 @@ public class PlayerData {
 							nick = decodeStr(pairs[1]);
 						}
 					} catch (NullPointerException npe) {
-						BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \"" + strs[data] + "\"");
+                    BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \n{}", strs[data]);
 					}
 
 				if(uuid != null) {
@@ -97,7 +97,7 @@ public class PlayerData {
 			ArrayList<PlayerData> playerlist = PlayerData.fromString(Input);
 			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist);
 			for(int player =0;player < playerlist.size();player++) {
-				PlayerData pdata = playerlist.get(0);
+				PlayerData pdata = playerlist.get(player);
 				if (pdata != null) {
 					map.put(pdata.uuid, pdata);
 					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
@@ -105,20 +105,6 @@ public class PlayerData {
 					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData", pdata);
 				}
 			}
-			/*
-			Scanner scn = new Scanner(Input).useDelimiter("[PlayerDataEntry]\n");
-			while (scn.hasNext()){
-				PlayerData pdat = PlayerData.fromString(scn.next());
-				if(pdat != null){
-                    map.put(pdat.uuid, pdat);
-					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData",pdat);
-                }else{
-					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData",pdat);
-				}
-			}
-			scn.close();
-			fis.close();
-			*/
 		} catch(IOException ioe) {
             BetterForgeChat.LOGGER.error("Failed to load {}", dataFile.getAbsolutePath());
 		}
