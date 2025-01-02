@@ -63,7 +63,7 @@ public class ChatEventHandler implements IReloadable {
         String msg = e.getMessage().getString();
 		if(msg == null || (msg).isEmpty()) return;
 		String tstamp = timestampFormat == null ? "" : timestampFormat.format(new Date());
-		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(profile.getGameProfile());
+		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(profile);
 		String fmat = chatMessageFormat.replace("$time", tstamp).replace("$name", name);
 		MutableComponent beforeMsg = TextFormatter.stringToFormattedText(fmat.substring(0, fmat.indexOf("$msg")));
 		MutableComponent afterMsg = TextFormatter.stringToFormattedText(fmat.substring(fmat.indexOf("$msg") + 4));

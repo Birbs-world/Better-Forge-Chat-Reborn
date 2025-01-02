@@ -29,7 +29,7 @@ public class BetterForgeChat {
 	public static final String CHAT_ID_STR = 
 			"&cBetter &9&lForge&r &eChat&r &d(c)Disa Kandria, Jeremiah Lowe 2022-2024&r\n";
 	public static final String MODID = "bfcrmod";
-	public static final String VERSION = "V2.0.0-Alpha";
+	public static final String VERSION = "V2.0.1";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BetterForgeChat instance;
 	
@@ -39,8 +39,6 @@ public class BetterForgeChat {
     ChatEventHandler chatHandler = new ChatEventHandler();
     PlayerEventHandler playerEventHandler = new PlayerEventHandler();
     ConfigurationEventHandler configurationHandler = new ConfigurationEventHandler();
-    //PermissionsHandler permissionsHandler = new PermissionsHandler();
-    //CommandRegistrationHandler commandRegistrator = new CommandRegistrationHandler();
 
     public BetterForgeChat(IEventBus modBus, ModContainer container) {
     	instance = this;
@@ -59,19 +57,8 @@ public class BetterForgeChat {
 
         NeoForge.EVENT_BUS.register(PermissionsHandler.class); //register permissions handler
 
-
-        // Register server chat event
-        //NeoForge.EVENT_BUS.register(chatHandler);
-        // Register permissions mod API checking on server start
-        //    NeoForge.EVENT_BUS.register(modLoadingEvent);
-        // Register player events (NameFormat and TabListNameFormat)
-        //    NeoForge.EVENT_BUS.register(playerEventHandler);
-        // Final mod loading completion message
-
-        // Register mod loading completed event
         modBus.addListener(this::loadComplete);
         modBus.register(this);
-        //NeoForge.EVENT_BUS.register(this); // Register the mod itself
 
         NeoForge.EVENT_BUS.register(CommandRegistrationHandler.class); // Register commands
 

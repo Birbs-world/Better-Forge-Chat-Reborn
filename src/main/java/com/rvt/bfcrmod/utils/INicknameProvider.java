@@ -6,17 +6,16 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import com.mojang.authlib.GameProfile;
 
 public interface INicknameProvider {
-	String getPlayerNickname(Player player);
 
 	@NonNull
     String getProviderName();
 
-	String getPlayerNickname(GameProfile player);
+	String getPlayerNickname(Player player);
 	@NonNull
-    default String getPlayerChatName(GameProfile player) {
+    default String getPlayerChatName(Player player) {
 		
 		String nick = getPlayerNickname(player);
-		if(nick == null || nick.isEmpty()) return player.getName();
+		if(nick == null || nick.isEmpty()) return player.getName().getString();
 		else return nick;
 	}
 }

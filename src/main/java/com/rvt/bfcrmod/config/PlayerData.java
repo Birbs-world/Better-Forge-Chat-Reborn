@@ -94,7 +94,7 @@ public class PlayerData {
 			ArrayList<PlayerData> playerlist = PlayerData.fromString(Input);
 			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist);
 			for(int player =0;player < playerlist.size();player++) {
-				PlayerData pdata = playerlist.get(0);
+				PlayerData pdata = playerlist.get(player);
 				if (pdata != null) {
 					map.put(pdata.uuid, pdata);
 					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
@@ -102,7 +102,7 @@ public class PlayerData {
 					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData", pdata);
 				}
 			}
-		} catch(IOException ioe) {
+		} catch(IOException|NullPointerException ioe) {
 			BetterForgeChat.LOGGER.error("Failed to load {}", dataFile.getAbsolutePath());
 		}
 	}

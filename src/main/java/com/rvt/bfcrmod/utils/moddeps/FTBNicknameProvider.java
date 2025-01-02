@@ -1,6 +1,5 @@
 package com.rvt.bfcrmod.utils.moddeps;
 
-import com.mojang.authlib.GameProfile;
 import net.minecraft.world.entity.player.Player;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
@@ -20,11 +19,6 @@ public class FTBNicknameProvider implements INicknameProvider {
 	}
 	@Override public @NonNull String getProviderName() {
 		return "FTB Essentials";
-	}
-
-	@Override
-	public String getPlayerNickname(GameProfile player) {
-		return "";
 	}
 
 }
