@@ -29,6 +29,7 @@ public class ChatEventHandler implements IReloadable {
 	private static SimpleDateFormat timestampFormat = null;
 	private static boolean markdownEnabled = false;
 	private static String chatMessageFormat = "";
+	private static String chatMessageColor = "";
 	private static boolean loaded = false;
 	
         @Override
@@ -37,9 +38,15 @@ public class ChatEventHandler implements IReloadable {
 		timestampFormat = ConfigHandler.config.enableTimestamp.get() ? new SimpleDateFormat(ConfigHandler.config.timestampFormat.get()) : null;
 		markdownEnabled = ConfigHandler.config.enableMarkdown.get();
 		chatMessageFormat = ConfigHandler.config.chatMessageFormat.get();
+		chatMessageColor = ConfigHandler.config.chatMessageColor.get();
 		loaded = true;
 	}
-	
+
+	public static String getChatMessageColor() {
+		BetterForgeChat.LOGGER.debug("Chat color from config: {}",chatMessageColor);
+		return chatMessageColor;
+	}
+
 	public static Style getHoverClickEventStyle(Component old) {
 		if(old instanceof TranslatableContents tcmp) {
             Object[] args = tcmp.getArgs();
@@ -64,9 +71,13 @@ public class ChatEventHandler implements IReloadable {
 		if(msg == null || (msg).isEmpty()) return;
 		String tstamp = timestampFormat == null ? "" : timestampFormat.format(new Date());
 		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(profile);
+		BetterForgeChat.LOGGER.debug("global message format: {}",chatMessageFormat);
 		String fmat = chatMessageFormat.replace("$time", tstamp).replace("$name", name);
+		BetterForgeChat.LOGGER.debug("formatted: {}",fmat);
 		MutableComponent beforeMsg = TextFormatter.stringToFormattedText(fmat.substring(0, fmat.indexOf("$msg")));
+		BetterForgeChat.LOGGER.debug("before message: {}",beforeMsg.toString());
 		MutableComponent afterMsg = TextFormatter.stringToFormattedText(fmat.substring(fmat.indexOf("$msg") + 4));
+		BetterForgeChat.LOGGER.debug("after message: {}",afterMsg.toString());
 		boolean enableColor = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.coloredChatNode);
 		boolean enableStyle = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.styledChatNode);
 		
@@ -83,8 +94,11 @@ public class ChatEventHandler implements IReloadable {
 			player.sendSystemMessage(ecmp);
 		}
 		// Convert markdown to normal essentials formatting
-		if(markdownEnabled && enableStyle && PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.markdownChatNode))
+		if(markdownEnabled && enableStyle && PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.markdownChatNode)) {
+			BetterForgeChat.LOGGER.debug("pre markdown formatted text: {}", msg);
 			msg = MarkdownFormatter.markdownStringToFormattedString(msg);
+			BetterForgeChat.LOGGER.debug("post markdown formatted text: {}", msg);
+		}
 
 		// Start generating the main TextComponent
 		MutableComponent msgComp = TextFormatter.stringToFormattedText(msg, enableColor, enableStyle);

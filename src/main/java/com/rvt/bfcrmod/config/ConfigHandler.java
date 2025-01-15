@@ -10,6 +10,7 @@ public class ConfigHandler {
 	public static class ConfigBuilder {
 		public final ModConfigSpec.ConfigValue<String> playerNameFormat;
 		public final ModConfigSpec.ConfigValue<String> chatMessageFormat;
+		public final ModConfigSpec.ConfigValue<String> chatMessageColor;
 		public final ModConfigSpec.ConfigValue<String> timestampFormat;
 		public final ModConfigSpec.ConfigValue<String> discordBotToken;
 
@@ -36,18 +37,25 @@ public class ConfigHandler {
 							 "    $prefix is replaced by the user's prefix or nothing if the user has no prefix",
 							 "    $suffix is replaced by the user's suffix or nothing if the user has no suffix",
 							 "    $name is replaced by the user's name, or nickname if they have one")
-					.define("playerNameFormat", "$prefix$name$suffix");
+					.define("playerNameFormat", "$prefix $name $suffix");
 			chatMessageFormat = builder
 					.comment("  Controls the chat message format",
 							 "    $time is replaced by the timestamp field or nothing if disabled", 
 							 "    $name is replaced by the user's name, or nickname if they have one",
+							 "    colors can be uses in the formatting string. for a global message color see next section",
 							 "    $msg is replaced by the username's message (if you use it more then once it WILL break this mod)")
 					.define("chatMessageFormat", "$time | $name: $msg");
+			chatMessageColor = builder
+					.comment("  Sets the global color of the chat messages",
+							 "   Choose one of the following:",
+							 "    AQUA, RED, LIGHT_PURPLE, YELLOW, WHITE, BLACK, GOLD, GRAY, BLUE, GREEN,",
+							 "    DARK_GRAY, DARK_AQUA, DARK_RED, DARK_PURPLE, DARK_GREEN, DARK_BLUE")
+					.define("chatMessageColor", "WHITE");
 			timestampFormat = builder
 					.comment("  Timestamp format following the java SimpleDateFormat",
 							 "    Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html")
 					.define("timestampFormat", "HH:mm");
-			discordBotToken = builder.comment("  Discord bot token for discord integration").define("discordBotToken", "");
+			discordBotToken = builder.comment("  Discord bot token for discord integration (not implemented yet)").define("discordBotToken", "");
 			enableTimestamp = builder.comment("  Enables or disables the filling in of timestamps").define("enableTimestamp", true);
 			enableFtbEssentials = builder.comment("  Enables or disables FTB essentials nickname integration").define("useFtbEssentials", true);
 			enableLuckPerms = builder.comment("  Enables or disables LuckPerms integration").define("useLuckPerms", true);
