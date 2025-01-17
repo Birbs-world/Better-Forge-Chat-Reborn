@@ -29,7 +29,7 @@ public class BetterForgeChat {
 	public static final String CHAT_ID_STR = 
 			"&cBetter &9&lForge&r &eChat&r &d(c)Disa Kandria, Jeremiah Lowe 2022-2024&r\n";
 	public static final String MODID = "bfcrmod";
-	public static final String VERSION = "V3.0.0";
+	public static final String VERSION = "V4.0.1";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BetterForgeChat instance;
 	
