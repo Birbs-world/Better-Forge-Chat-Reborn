@@ -92,18 +92,18 @@ public class PlayerData {
 			String Input = new String(fis.readAllBytes());
 			BetterForgeChat.LOGGER.debug("Current open file content: \n {}",Input);
 			ArrayList<PlayerData> playerlist = PlayerData.fromString(Input);
-			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist);
+			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist.toString());
 			for(int player =0;player < playerlist.size();player++) {
 				PlayerData pdata = playerlist.get(player);
 				if (pdata != null) {
 					map.put(pdata.uuid, pdata);
 					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
 				} else {
-					BetterForgeChat.LOGGER.debug("failed to load playerData \n {} from bfcr.playerData", pdata);
+					BetterForgeChat.LOGGER.error("failed to load playerData \n {} from bfcr.playerData", pdata);
 				}
 			}
-		} catch(IOException|NullPointerException ioe) {
-			BetterForgeChat.LOGGER.error("Failed to load {}", dataFile.getAbsolutePath());
+		} catch(IOException|NullPointerException e) {
+			BetterForgeChat.LOGGER.trace("Failed to load {} \n{}", dataFile.getAbsolutePath(),e);
 		}
 	}
 	public static void saveToDir(File playerDirectory) {

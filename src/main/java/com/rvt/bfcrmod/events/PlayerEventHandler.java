@@ -46,10 +46,14 @@ public class PlayerEventHandler implements IReloadable {
 	}
 	@SubscribeEvent
 	public static void onSavePlayerData(SaveToFile e) {
-		PlayerData.saveToDir(e.getPlayerDirectory());
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterForgeChat")) {
+            PlayerData.saveToDir(e.getPlayerDirectory());
+        }
 	}
 	@SubscribeEvent
 	public static void onLoadPlayerData(LoadFromFile e) {
-		PlayerData.loadFromDir(e.getPlayerDirectory());
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterForgeChat")) {
+			PlayerData.loadFromDir(e.getPlayerDirectory());
+		}
 	}
 }
