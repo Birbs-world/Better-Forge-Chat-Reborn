@@ -1,3 +1,15 @@
+# BetterForgeChat (Fork)
+
+This repository is a fork of BetterForgeChat Reborn.
+
+Changes in this fork:
+- Added hex color support in chat (Format: `&#RRGGBB<Text>`)
+
+Original project:
+https://github.com/Birbs-world/Better-Forge-Chat-Reborn
+
+This fork remains licensed under GPL-3.0, the same license as the original project.
+
 # BetterForgeChat
 A Forge based server-side chat mod to allow prefixes, suffixes and integration with LuckPerms and FTB-Essentials nicknames.
 
@@ -43,4 +55,3 @@ This version is for MC1.20.1 and up. For MC1.18.2 The Original owner no longer h
  - Configurable scheduled server announcements
  - Potential 1.19.x support
  - Potential discord integration
- - Potential Hex Color Handling
