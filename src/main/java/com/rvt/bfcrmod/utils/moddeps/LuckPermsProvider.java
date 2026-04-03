@@ -35,6 +35,9 @@ public class LuckPermsProvider implements IMetadataProvider {
 		try {
 			CachedMetaData metaData = this.getMetaData(player);
             assert metaData != null;
+			if (metaData == null){
+				return new String[]{"",""};
+			}
             return new String[]{metaData.getPrefix(), metaData.getSuffix()};
 		} catch(IllegalStateException ise) {
 			return null;
