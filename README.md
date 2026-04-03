@@ -4,6 +4,8 @@ This repository is a fork of BetterForgeChat Reborn.
 
 Changes in this fork:
 - Added hex color support in chat (Format: `&#RRGGBB<Text>`)
+- fixed null check for getPlayerPrefixAndSuffix() in LuckPermsProvider.java
+
 
 Original project:
 https://github.com/Birbs-world/Better-Forge-Chat-Reborn
