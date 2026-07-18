@@ -2,6 +2,7 @@ package com.rvt.bfcrmod.utils.moddeps;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.rvt.bfcrmod.BetterForgeChat;
 import com.rvt.bfcrmod.utils.IMetadataProvider;
 import com.mojang.authlib.GameProfile;
 
@@ -32,11 +33,15 @@ public class LuckPermsProvider implements IMetadataProvider {
 
         @Override
 	public String[] getPlayerPrefixAndSuffix(GameProfile player) {
-		try {
-			CachedMetaData metaData = this.getMetaData(player);
-            assert metaData != null;
-            return new String[]{metaData.getPrefix(), metaData.getSuffix()};
-		} catch(IllegalStateException ise) {
+		if (this.getMetaData(player) != null){
+			try {
+				CachedMetaData metaData = this.getMetaData(player);
+				return new String[]{metaData.getPrefix(), metaData.getSuffix()};
+			} catch(IllegalStateException | NullPointerException e) {
+				BetterForgeChat.LOGGER.warn("Caught Exception: {} /n If {} is a fake player (added by mod) this warning can be ignored",e,player);
+				return null;
+			}
+		}else{
 			return null;
 		}
 	}
