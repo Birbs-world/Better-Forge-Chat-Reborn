@@ -35,12 +35,14 @@ This version is for MC1.20.1 and up. For MC1.18.2 The Original owner no longer h
  - assume any other chat modification mods are incompatible
  - Please submit any issues to GitHub
 
-## Development
-1.21.1 is in development 1.20.1 is in release
+## Versions
+- 1.21.1 is in development 
+- 1.20.1 is in release
+
+## In Progress
+ - Hex Color Handling
 
 ## Planned features
- - Ability to use colors on sign permission
  - Configurable scheduled server announcements
- - Potential 1.19.x support
  - Potential discord integration
  - Potential Hex Color Handling
