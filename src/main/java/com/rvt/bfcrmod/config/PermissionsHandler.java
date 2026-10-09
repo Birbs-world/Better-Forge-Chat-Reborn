@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.UUID;
 
 import com.rvt.bfcrmod.BetterForgeChat;
-import com.rvt.bfcrmod.TextFormatter;
+import com.rvt.bfcrmod.Parser;
 
 import net.minecraft.network.chat.Component;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -28,15 +28,12 @@ public class PermissionsHandler {
 			ezyPermission("tablist.nickname", "Tab list nicknames", "Enables/Disables nicknames showing in the tab list");
 	public static PermissionNode<Boolean> tabListMetadataNode = 
 			ezyPermission("tablist.metadata", "Tab list metadata", "Enables/Disables prefixes&suffixes showing in the tab list");
-	
-	public static PermissionNode<Boolean> colorsCommand =
-			ezyPermission("commands.colors", "Colors command", "Enables/Disables the \"/colors\" command");
-	public static PermissionNode<Boolean> bfcrmodCommand = 
-			ezyPermission("commands.bfcr.allowed", "BetterForgeChat command", "Enables/Disables the \"/bfc\" command");
+	public static PermissionNode<Boolean> bfcrmodCommand =
+			ezyPermission("commands.bfcr.allowed", "BetterNeoForgeChat command", "Enables/Disables the \"/bfc\" command");
 	public static PermissionNode<Boolean> bfcrmodCommandColorsSubCommand = 
-			ezyPermission("commands.bfcr.colors", "BetterForgeChat colors sub-command", "Enables/Disables the \"/bfc colors\" sub-command");
+			ezyPermission("commands.bfcr.colors", "BetterNeoForgeChat colors sub-command", "Enables/Disables the \"/bfc colors\" sub-command");
 	public static PermissionNode<Boolean> bfcrmodCommandInfoSubCommand = 
-			ezyPermission("commands.bfcr.info", "BetterForgeChat info sub-command", "Enables/Disables the \"/bfc info\" sub-command");
+			ezyPermission("commands.bfcr.info", "BetterNeoForgeChat info sub-command", "Enables/Disables the \"/bfc info\" sub-command");
 	
 	public static PermissionNode<Boolean> whoisCommand = 
 			ezyPermission("commands.whois", "Nickname", "Enables/Disables the \"/whois <nickname>\" command");
@@ -60,7 +57,7 @@ public class PermissionsHandler {
 	private static PermissionNode<Boolean> ezyPermission(String id, String name, String desc) {
 		PermissionNode<Boolean> node = new PermissionNode<>(BetterForgeChat.MODID, id, 
 				PermissionTypes.BOOLEAN, (player, uuid, context) -> true);
-		node.setInformation(Component.literal(name),TextFormatter.stringToFormattedText(desc));
+		node.setInformation(Component.literal(name), Parser.parse(desc));
 		return node;
 	}
 

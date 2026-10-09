@@ -1,8 +1,7 @@
 package com.rvt.bfcrmod.utils;
 
-import com.mojang.authlib.GameProfile;
 import com.rvt.bfcrmod.BetterForgeChat;
-import com.rvt.bfcrmod.TextFormatter;
+import com.rvt.bfcrmod.Parser;
 import com.rvt.bfcrmod.config.ConfigHandler;
 
 import net.minecraft.network.chat.MutableComponent;
@@ -22,8 +21,7 @@ public class BetterForgeChatUtilities {
 	}
 	public static String getRawPreferredPlayerName(Player player, boolean enableNickname, boolean enableMetadata) {
 		String name = BetterForgeChat.instance.nicknameProvider != null && enableNickname ? BetterForgeChat.instance.nicknameProvider.getPlayerChatName(player) : player.getName().getString();
-		if(name == null) name = player.getName().getString(); /* No nickname (or null-nickname) provided */
-		String pfx = "", sfx = "";
+        String pfx = "", sfx = "";
 		if(enableMetadata && BetterForgeChat.instance.metadataProvider != null) {
 			String[] dat = BetterForgeChat.instance.metadataProvider.getPlayerPrefixAndSuffix(player.getGameProfile());
 			if(dat != null) {
@@ -42,9 +40,9 @@ public class BetterForgeChatUtilities {
 		}
 	}
 	public static MutableComponent getFormattedPlayerName(Player player) {
-		return TextFormatter.stringToFormattedText(getRawPreferredPlayerName(player));
+		return Parser.parse(getRawPreferredPlayerName(player));
 	}
 	public static MutableComponent getFormattedPlayerName(Player player, boolean enableNickname, boolean enableMetadata) {
-		return TextFormatter.stringToFormattedText(getRawPreferredPlayerName(player, enableNickname, enableMetadata));
+		return Parser.parse(getRawPreferredPlayerName(player, enableNickname, enableMetadata));
 	}
 }

@@ -3,8 +3,7 @@ package com.rvt.bfcrmod.commands;
 import java.util.Arrays;
 
 import com.rvt.bfcrmod.BetterForgeChat;
-import com.rvt.bfcrmod.TextFormatter;
-import com.rvt.bfcrmod.config.ConfigHandler;
+import com.rvt.bfcrmod.Parser;
 import com.rvt.bfcrmod.config.PermissionsHandler;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -17,9 +16,7 @@ import net.minecraft.commands.SharedSuggestionProvider;
 import net.neoforged.neoforge.server.permission.nodes.PermissionNode;
 
 public class BfcCommands {
-	private static final Iterable<String> bfcrmodSubCommands = Arrays.asList(new String[] {
-			"info", "colors", "test"
-	});
+	private static final Iterable<String> bfcrmodSubCommands = Arrays.asList("info", "colors", "test");
 	
 	protected static boolean checkPermission(CommandSourceStack c, PermissionNode<Boolean> node) {
 		try {
@@ -33,21 +30,14 @@ public class BfcCommands {
 		return checkPermission(c.getSource(), node);
 	}
 	protected static int failNoPermission(CommandContext<CommandSourceStack> ctx) {
-		ctx.getSource().sendFailure(TextFormatter.stringToFormattedText(TextFormatter.COLOR_RED + "You don't have permission to run this command" + TextFormatter.RESET_ALL_FORMAT));
+		ctx.getSource().sendFailure(Parser.parse("&c" + "You don't have permission to run this command" + "&r"));
 		return 0;
 	}
 	
 	public static void register(CommandDispatcher<CommandSourceStack> disp) {
-		disp.register(Commands.literal("bfcr").requires((c) -> {
-				return checkPermission(c, PermissionsHandler.bfcrmodCommand);
-			}).then(Commands.argument("mode", StringArgumentType.greedyString())
+		disp.register(Commands.literal("bfcr").requires((c) -> checkPermission(c, PermissionsHandler.bfcrmodCommand)).then(Commands.argument("mode", StringArgumentType.greedyString())
 					.suggests((context, builder) -> SharedSuggestionProvider.suggest(bfcrmodSubCommands, builder))
 					.executes(BfcCommands::modCommand)));
-		if(ConfigHandler.config.enableColorsCommand.get()) {
-			disp.register(Commands.literal("colors").requires((c) -> {
-					return checkPermission(c, PermissionsHandler.coloredChatNode);
-				}).executes(BfcCommands::colorCommand));
-		}
 		NickCommands.register(disp);
 	}
 	
@@ -69,7 +59,7 @@ public class BfcCommands {
                         if(hasNickProv) nickProvName = " (via " + nickProvName + ")";
 						String finalMetaProvName = metaProvName;
 						String finalNickProvName = nickProvName;
-						ctx.getSource().sendSuccess(() ->TextFormatter.stringToFormattedText(
+						ctx.getSource().sendSuccess(() -> Parser.parse(
                                 BetterForgeChat.CHAT_ID_STR + "\n&eMod ID: &d" + BetterForgeChat.MODID + "    &r&eMod version: &d" + BetterForgeChat.VERSION + " (forge)&r\n\n"
                                         + (hasMetaProv ? "&a&lWITH" : "&c&lWITHOUT") + "&r&e metadata integration" + finalMetaProvName + "&r\n"
                                         + (hasNickProv ? "&a&lWITH" : "&c&lWITHOUT") + "&r&e nickname integration" + finalNickProvName + "&r\n"), false);
@@ -77,11 +67,12 @@ public class BfcCommands {
                     } else return failNoPermission(ctx);
                 }
                 case "test" -> {
-                    ctx.getSource().sendSuccess(() ->TextFormatter.stringToFormattedText(
+                    ctx.getSource().sendSuccess(() -> Parser.parse(
                             BetterForgeChat.CHAT_ID_STR
-                                    + "&eColors & Styling internal debug test&r\n"
-                                            + "Normal &lBold&r &nUnderline&r &oItalic&r &mStrikthrough&r &kObfuscated&r &rReset\n"
-                                            + "Normal &lBold &nUnderline &oItalic &mStrikthrough &kObfuscated &rReset"), false);
+                                    + """
+										&eColors & Styling internal debug test&r
+										Normal &lBold&r &nUnderline&r &oItalic&r &mStrikthrough&r &kObfuscated&r &rReset
+										Normal &lBold &nUnderline &oItalic &mStrikthrough &kObfuscated &rReset"""), false);
                     return 1;
                 }
                 default -> {
@@ -91,8 +82,8 @@ public class BfcCommands {
 	}
 	public static int colorCommand(CommandContext<CommandSourceStack> ctx) {
 		ctx.getSource().sendSuccess(() ->
-				TextFormatter.stringToFormattedText(
-				BetterForgeChat.CHAT_ID_STR + TextFormatter.colorString()), false);
+				Parser.parse(
+				BetterForgeChat.CHAT_ID_STR + Parser.colorCodes()), false);
 		return 1;
 	}
 }

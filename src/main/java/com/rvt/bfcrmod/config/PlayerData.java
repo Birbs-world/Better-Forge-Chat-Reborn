@@ -68,7 +68,7 @@ public class PlayerData {
 							nick = decodeStr(pairs[1]);
 					}
 				} catch (NullPointerException npe) {
-					BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \"" + strs[data] + "\"");
+                    BetterForgeChat.LOGGER.error("Failed to parse PlayerData: \"{}\"", strs[data]);
 				}
 
 				if(uuid != null) {
@@ -93,15 +93,14 @@ public class PlayerData {
 			BetterForgeChat.LOGGER.debug("Current open file content: \n {}",Input);
 			ArrayList<PlayerData> playerlist = PlayerData.fromString(Input);
 			BetterForgeChat.LOGGER.debug("fromstring output: {}", playerlist.toString());
-			for(int player =0;player < playerlist.size();player++) {
-				PlayerData pdata = playerlist.get(player);
-				if (pdata != null) {
-					map.put(pdata.uuid, pdata);
-					BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
-				} else {
-					BetterForgeChat.LOGGER.error("failed to load playerData \n {} from bfcr.playerData", pdata);
-				}
-			}
+            for (PlayerData pdata : playerlist) {
+                if (pdata != null) {
+                    map.put(pdata.uuid, pdata);
+                    BetterForgeChat.LOGGER.debug("loaded playerData \n {} from bfcr.playerData", pdata);
+                } else {
+                    BetterForgeChat.LOGGER.error("failed to load playerData \n {} from bfcr.playerData", pdata);
+                }
+            }
 		} catch(IOException|NullPointerException e) {
 			BetterForgeChat.LOGGER.trace("Failed to load {} \n{}", dataFile.getAbsolutePath(),e);
 		}
@@ -123,14 +122,14 @@ public class PlayerData {
 	}
 	public static String encodeStr(String str) {
 		if(str == null) return "null";
-		String newStr = "";
+		StringBuilder newStr = new StringBuilder();
 		for(int i = 0; i < str.length(); i++) {
 			char c = str.charAt(i);
-			if((c >= ' ' && c <= '~') && c != '\"' && c != '\\') newStr += c;
+			if((c >= ' ' && c <= '~') && c != '\"' && c != '\\') newStr.append(c);
 			else {
 				String hex = Integer.toHexString(c);
 				if(hex.length() < 4) hex = "0".repeat(4 - hex.length()) + hex;
-				newStr += "\\u" + hex;
+				newStr.append("\\u").append(hex);
 			}
 		}
 		return "\"" + newStr + "\"";
@@ -139,16 +138,16 @@ public class PlayerData {
 		if(str == null) return null;
 		str = str.trim();
 		if(str.startsWith("\"") && str.endsWith("\"") && str.length() > 1) {
-			String out = "";
+			StringBuilder out = new StringBuilder();
 			for(int i = 1; i < str.length() - 1; i++) {
 				char c = str.charAt(i);
 				if(c == '\\' && i < str.length() - 6 && str.charAt(i + 1) == 'u') {
 					String hex = str.substring(i + 2, i + 6);
-					out += (char) Integer.parseUnsignedInt(hex, 16);
+					out.append((char) Integer.parseUnsignedInt(hex, 16));
 					i += 5;
-				} else out += c;
+				} else out.append(c);
 			}
-			return out;
+			return out.toString();
 		} else return null;
 	}
 }
