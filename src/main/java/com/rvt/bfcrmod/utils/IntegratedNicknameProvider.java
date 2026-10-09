@@ -12,6 +12,6 @@ public class IntegratedNicknameProvider implements INicknameProvider {
 	}
 
 	@Override public @NonNull String getProviderName() {
-		return "BetterForgeChat";
+		return "BetterNeoForgeChat";
 	}
 }

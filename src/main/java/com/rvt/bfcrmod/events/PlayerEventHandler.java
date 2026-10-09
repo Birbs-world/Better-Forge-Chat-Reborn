@@ -17,12 +17,12 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent.TabListNameFormat;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = BetterForgeChat.MODID)
 public class PlayerEventHandler implements IReloadable {
 	private static boolean enableNicknamesInTabList = false;
 	private static boolean enableMetadataInTabList = false;
 	
-        @Override
+	@Override
 	public void reloadConfigOptions() {
 		enableNicknamesInTabList = ConfigHandler.config.enableNicknamesInTabList.get();
 		enableMetadataInTabList = ConfigHandler.config.enableMetadataInTabList.get();
@@ -30,7 +30,7 @@ public class PlayerEventHandler implements IReloadable {
 	
 	@SubscribeEvent
 	public static void onTabListNameFormatEvent(TabListNameFormat e) {
-		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() != null && e.getEntity() instanceof ServerPlayer) {
+		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() instanceof ServerPlayer) {
 			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
 			Player player = e.getEntity();
 			BetterForgeChat.LOGGER.debug("Tablist formatting for: "+ player);
@@ -41,18 +41,18 @@ public class PlayerEventHandler implements IReloadable {
 	}
 	@SubscribeEvent
 	public static void onNameFormatEvent(NameFormat e) {
-		if(e.getEntity() != null && e.getEntity() instanceof ServerPlayer)
+		if(e.getEntity() instanceof ServerPlayer)
 			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity()));
 	}
 	@SubscribeEvent
 	public static void onSavePlayerData(SaveToFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterForgeChat")) {
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) {
             PlayerData.saveToDir(e.getPlayerDirectory());
         }
 	}
 	@SubscribeEvent
 	public static void onLoadPlayerData(LoadFromFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterForgeChat")) {
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) {
 			PlayerData.loadFromDir(e.getPlayerDirectory());
 		}
 	}

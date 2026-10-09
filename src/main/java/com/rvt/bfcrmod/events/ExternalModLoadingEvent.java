@@ -19,12 +19,7 @@ public class ExternalModLoadingEvent {
 		loadLuckPerms();
 		loadFtbEssentials();
 		loadIntegratedNicknameProvider();
-		//loadDiscordIntegration();
 	}
-	/*private void loadDiscordIntegration() {
-		if(ConfigHandler.config.enableDiscordBotIntegration.get()) {
-		}
-	}*/
 	private static void loadIntegratedNicknameProvider() {
 		if (BetterForgeChat.instance.nicknameProvider == null && 
 				ConfigHandler.config.autoEnableChatNicknameCommand.get()) {
@@ -58,7 +53,7 @@ public class ExternalModLoadingEvent {
 			}
 		}else{
 			BetterForgeChat.instance.metadataProvider = null;
-			BetterForgeChat.LOGGER.warn("Better Forge Chat Reborn is Running on client, Will not integrate Disabled LuckPerms API");
+			BetterForgeChat.LOGGER.warn("Better NeoForge Chat Reborn is Running on client, Will not integrate Disabled LuckPerms API");
 		}
 	}
 	private static void loadFtbEssentials() {
