@@ -8,7 +8,6 @@ bin
 *.iws
 *.iml
 .idea
-
 build
 .gradle
 .eclipse
@@ -16,6 +15,6 @@ run
 ./runs
 run-data
 runClient/*
-runServer
-
+runServer/*
+runTestServer/*
 repo
