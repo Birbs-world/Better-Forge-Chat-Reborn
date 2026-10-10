@@ -13,6 +13,8 @@ public class ConfigHandler {
 		public final ModConfigSpec.ConfigValue<String> chatMessageFormat;
 		public final ModConfigSpec.EnumValue<ChatFormatting> chatMessageColor;
 		public final ModConfigSpec.ConfigValue<String> timestampFormat;
+		public final ModConfigSpec.ConfigValue<String> setTimezone;
+		public final ModConfigSpec.ConfigValue<String> timeSeperator;
 		public final ModConfigSpec.IntValue maximumNicknameLength;
 		public final ModConfigSpec.IntValue minimumNicknameLength;
 		public final ModConfigSpec.BooleanValue enableTimestamp;
@@ -52,14 +54,21 @@ public class ConfigHandler {
 							 $name is replaced by the user's name, or nickname if they have one
 							 colors can be uses in the formatting string. for a global message color see next section
 							 $msg is replaced by the username's message (if you use it more then once it WILL break this mod)""")
-					.define("chatMessageFormat", "$name: $msg");
+					.define("chatMessageFormat", "$time $name: $msg");
 			chatMessageColor = builder.comment("Sets the global color of the chat messages").defineEnum("chatMessageColor", ChatFormatting.WHITE);
 			timestampFormat = builder
 					.comment("""
 							 Timestamp format following the java SimpleDateFormat
 							 Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html""")
 					.define("timestampFormat", "HH:mm");
-			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", false);
+			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", true);
+			setTimezone = builder
+					.comment("""
+								Set server timezone for BFCR chat messages
+								Uses TZ idenitifer e.g. Pacific/Auckland
+								To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
+					.define("setTimezone","Pacific/Auckland");
+			timeSeperator = builder.comment("set seperator character").define("timeseperator","|");
 			enableFtbEssentials = builder.comment("Enables or disables FTB essentials nickname integration").define("useFtbEssentials", true);
 			enableLuckPerms = builder.comment("Enables or disables LuckPerms integration").define("useLuckPerms", true);
 			enableMarkdown = builder.comment("Enables or disables markdown styling").define("markdownEnabled", true);

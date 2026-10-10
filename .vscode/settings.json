@@ -1,0 +1,21 @@
+{
+    "dbcode.connections": [
+        {
+            "connectionId": "sGWYSVXwthENNu-7-Vn0a",
+            "name": "Minecraft",
+            "driver": "h2",
+            "connectionType": "embedded",
+            "socket": "bfcr-neoforge-1.21.1/run/config/luckperms/luckperms-h2-v2.mv.db",
+            "username": "root",
+            "savePassword": "yes",
+            "driverOptions": {
+                "ifExists": false
+            },
+            "readOnly": false,
+            "postConnectionSqlType": "inline",
+            "introspection": {
+                "progressive": false
+            }
+        }
+    ]
+}

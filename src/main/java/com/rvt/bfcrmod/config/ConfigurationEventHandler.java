@@ -2,8 +2,8 @@ package com.rvt.bfcrmod.config;
 
 import java.util.ArrayList;
 
-import com.rvt.bfcrmod.BetterForgeChat;
-import net.neoforged.fml.common.EventBusSubscriber;
+//import com.rvt.bfcrmod.BetterForgeChat;
+//import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.server.ServerStartedEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.event.config.ModConfigEvent.Reloading;

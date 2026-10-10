@@ -27,9 +27,9 @@ import org.slf4j.Logger;
 @Mod(BetterForgeChat.MODID )
 public class BetterForgeChat {
 	public static final String CHAT_ID_STR = 
-			"&cBetter &9&lForge&r &eChat&r &d(c)Disa Kandria, Jeremiah Lowe 2022-2024&r\n";
+			"&cBetter &9&lNeoForge&r &eChat&r \n&d(c) Disa Kandria 2024-2026, Jeremiah Lowe 2022-2024&r\n";
 	public static final String MODID = "bfcrmod";
-	public static final String VERSION = "V5.0.0";
+	public static final String VERSION = "V5.0.1";
     public static final Logger LOGGER = LogUtils.getLogger();
     public static BetterForgeChat instance;
 	
@@ -74,6 +74,6 @@ public class BetterForgeChat {
     	// Register player events (NameFormat and TabListNameFormat)
         NeoForge.EVENT_BUS.register(PlayerEventHandler.class);
         // Final mod loading completion message
-    	LOGGER.info("Mod loaded up and ready to go! (c) Disa Kandria 2024!");
+    	LOGGER.info("Mod loaded up and ready to go! (c) Disa Kandria 2024-2026!");
     }
 }

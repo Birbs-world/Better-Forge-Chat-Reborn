@@ -101,8 +101,11 @@ public class PlayerData {
                     BetterForgeChat.LOGGER.error("failed to load playerData \n {} from bfcr.playerData", pdata);
                 }
             }
+			fis.close();
 		} catch(IOException|NullPointerException e) {
 			BetterForgeChat.LOGGER.trace("Failed to load {} \n{}", dataFile.getAbsolutePath(),e);
+		} finally {
+			
 		}
 	}
 	public static void saveToDir(File playerDirectory) {
