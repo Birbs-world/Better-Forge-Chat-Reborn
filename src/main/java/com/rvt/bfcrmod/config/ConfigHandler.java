@@ -79,36 +79,41 @@ public class ConfigHandler {
 			
 			boldSymbol1 = builder
 					.comment("Controls what symbol is used for bold formatting")
-					.define("boldSymbol1", "**");
+					.define("boldSymbol1", "**", this::checkLength);
 			boldSymbol2 = builder
 					.comment("Controls what symbol is used for bold formatting")
-					.define("boldSymbol2", "");
+					.define("boldSymbol2", "", this::checkLength);
 			italicSymbol1 = builder
 					.comment("Controls what symbol is used for italic formatting")
-					.define("italicSymbol1", "*");
+					.define("italicSymbol1", "*", this::checkLength);
 			italicSymbol2 = builder
 					.comment("Controls what symbol is used for italic formatting")
-					.define("italicSymbol2", "_");
+					.define("italicSymbol2", "_", this::checkLength);
 			obfuscatedSymbol1 = builder
 					.comment("Controls what symbol is used for obfuscated formatting")
-					.define("obfuscatedSymbol1", "~");
+					.define("obfuscatedSymbol1", "~", this::checkLength);
 			obfuscatedSymbol2 = builder
 					.comment("Controls what symbol is used for obfuscated formatting")
-					.define("obfuscatedSymbol2", "");
+					.define("obfuscatedSymbol2", "", this::checkLength);
 			underlineSymbol1 = builder
 					.comment("Controls what symbol is used for underline formatting")
-					.define("underlineSymbol1", "__");
+					.define("underlineSymbol1", "__", this::checkLength);
 			underlineSymbol2 = builder
 					.comment("Controls what symbol is used for underline formatting")
-					.define("underlineSymbol2", "");
+					.define("underlineSymbol2", "", this::checkLength);
 			strikethroughSymbol1 = builder
 					.comment("Controls what symbol is used for strikethrough formatting")
-					.define("strikethroughSymbol1", "~~");
+					.define("strikethroughSymbol1", "~~", this::checkLength);
 			strikethroughSymbol2 = builder
 					.comment("Controls what symbol is used for strikethrough formatting")
-					.define("strikethroughSymbol2", "");
+					.define("strikethroughSymbol2", "", this::checkLength);
 //			builder.pop();
 			builder.pop();
+		}
+		
+		private boolean checkLength(Object string) {
+			String s =  (String)string;
+			return s.length() <= 2;
 		}
 	}
 }
