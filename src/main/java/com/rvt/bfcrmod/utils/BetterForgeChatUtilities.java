@@ -4,15 +4,16 @@ import com.rvt.bfcrmod.BetterForgeChat;
 import com.rvt.bfcrmod.Parser;
 import com.rvt.bfcrmod.config.ConfigHandler;
 
+import com.rvt.bfcrmod.config.IReloadable;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.entity.player.Player;
+import org.codehaus.plexus.util.StringUtils;
 
-public class BetterForgeChatUtilities {
+public class BetterForgeChatUtilities implements IReloadable {
 	private static String playerNameFormat = "";
-	
-	public static void reloadConfig() {
+	@Override
+	public void reloadConfigOptions() {
 		playerNameFormat = ConfigHandler.config.playerNameFormat.get();
-		BetterForgeChat.LOGGER.debug("getting player name format: {}",playerNameFormat);
 	}
 	
 	public static String getRawPreferredPlayerName(Player player) {
@@ -30,11 +31,11 @@ public class BetterForgeChatUtilities {
 			}
 		}
 		String fmat = playerNameFormat;
-		if(fmat == null) {
+		if(StringUtils.isBlank(fmat)) {
 			BetterForgeChat.LOGGER.warn("Could not get playerNameFormat from configuration file, please post issue on GitHub!");
 			return player.getName().getString();
-		} else{
-			String playerNameFormatted = fmat.replace("$prefix", pfx).replace("$name", name).replace("$suffix", sfx);
+		} else {
+			String playerNameFormatted = fmat.replace("$prefix", pfx.strip()).replace("$name", name).replace("$suffix", sfx.strip());
 			BetterForgeChat.LOGGER.debug("player name formatted to: {}",playerNameFormatted);
 			return playerNameFormatted;
 		}

@@ -27,10 +27,11 @@ sourceSets.main.resources {
 }
 
 repositories {
-    // Add here additional repositories if required by some of the dependencies below.
+    mavenCentral()
     flatDir {
         dir 'lib'
     }
+    maven { url = uri("https://maven.ftb.dev/releases") }
 }
 
 base {
@@ -55,13 +56,12 @@ neoForge {
     // Default run configurations.
     // These can be tweaked, removed, or duplicated as needed.
     runs {
-        /* 
+
         client {
             client()
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
-        */
+
 
         server {
             server()
@@ -127,11 +127,10 @@ dependencies {
     // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
     // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
     // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
-    implementation "net.neoforged:neoforge:${neo_version}"
 
-    compileOnly "ftbessentials:ftb-essentials-neoforge-2101.1.10"
-    compileOnly 'net.luckperms:api:5.4'
-
+    compileOnly( "dev.ftb.mods:ftb-essentials-neoforge:2101.1.10") { transitive = false }
+    compileOnly("net.luckperms:api:5.5")
+//    runtimeOnly("net.luckperms:5.5")
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
     // The group id is ignored when searching -- in this case, it is "blank"

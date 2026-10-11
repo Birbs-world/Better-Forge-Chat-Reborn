@@ -35,22 +35,17 @@ public class BetterForgeChat {
 	
     public IMetadataProvider metadataProvider = null;
     public INicknameProvider nicknameProvider = null;
-
-    ChatEventHandler chatHandler = new ChatEventHandler();
-    PlayerEventHandler playerEventHandler = new PlayerEventHandler();
     ConfigurationEventHandler configurationHandler = new ConfigurationEventHandler();
 
     public BetterForgeChat(IEventBus modBus, ModContainer container) {
     	instance = this;
     	// Register reloadable configuration stuff (reduce some things subscribed to the event bus)
-        configurationHandler.registerReloadable(playerEventHandler);
-        configurationHandler.registerReloadable(chatHandler);
+        configurationHandler.registerReloadable(new PlayerEventHandler());
+        configurationHandler.registerReloadable(new ChatEventHandler());
         configurationHandler.registerReloadable(new Parser());
-    	configurationHandler.registerReloadable(() -> {
-    		NickCommands.reloadConfig();
-    		BetterForgeChatUtilities.reloadConfig();
-    	});
-
+        configurationHandler.registerReloadable(new BetterForgeChatUtilities());
+        configurationHandler.registerReloadable(new NickCommands());
+        
         modBus.addListener(configurationHandler::onModConfigReloadingEvent);
         NeoForge.EVENT_BUS.addListener(configurationHandler::onServerStarted);
 

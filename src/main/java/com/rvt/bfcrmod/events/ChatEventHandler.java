@@ -10,7 +10,6 @@ import com.rvt.bfcrmod.Parser;
 import com.rvt.bfcrmod.config.ConfigHandler;
 import com.rvt.bfcrmod.config.IReloadable;
 import com.rvt.bfcrmod.config.PermissionsHandler;
-//import com.rvt.bfcrmod.config.PlayerData;
 import com.rvt.bfcrmod.utils.BetterForgeChatUtilities;
 
 import net.minecraft.ChatFormatting;
@@ -22,25 +21,26 @@ import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.neoforge.event.ServerChatEvent;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import org.codehaus.plexus.util.StringUtils;
 
 @EventBusSubscriber(modid = BetterForgeChat.MODID)
 public class ChatEventHandler implements IReloadable {
-	private static SimpleDateFormat timestampFormat = null;
-	private static TimeZone timeZone = null;
-	private static String timeSeperator = null;
-	private static String tz = null; 
+	private static String timestampFormat = null;
+	private static String timeZone = null;
+	private static boolean enableTimestamp = false;
+	private static String timeSeparator = null;
 	private static boolean markdownEnabled = false;
-	private static String chatMessageFormat = "";
+	private static String chatMessageFormat = null;
 	private static ChatFormatting chatMessageColor = ChatFormatting.WHITE;
 	private static boolean loaded = false;
-	
 	
 	@Override
 	public void reloadConfigOptions() {
 		loaded = false;
-		timestampFormat = ConfigHandler.config.enableTimestamp.get() ? new SimpleDateFormat(ConfigHandler.config.timestampFormat.get()) : null;
-		timeZone = TimeZone.getTimeZone(ConfigHandler.config.setTimezone.get());
-		timeSeperator = ConfigHandler.config.timeSeperator.get();
+		timestampFormat = ConfigHandler.config.timestampFormat.get();
+		timeZone = ConfigHandler.config.setTimezone.get();
+		enableTimestamp = ConfigHandler.config.enableTimestamp.get();
+		timeSeparator = ConfigHandler.config.timeSeparator.get();
 		markdownEnabled = ConfigHandler.config.enableMarkdown.get();
 		chatMessageFormat = ConfigHandler.config.chatMessageFormat.get();
 		chatMessageColor = ConfigHandler.config.chatMessageColor.get();
@@ -51,90 +51,54 @@ public class ChatEventHandler implements IReloadable {
 		BetterForgeChat.LOGGER.debug("Chat color from config: {}",chatMessageColor);
 		return chatMessageColor;
 	}
-
-//	public static Style getHoverClickEventStyle(Component old) {
-//		if(old instanceof TranslatableContents tcmp) {
-//            Object[] args = tcmp.getArgs();
-//			for(Object arg : args) {
-//				if(arg instanceof MutableComponent tc) {
-//                    if(tc.getStyle().getClickEvent() != null)
-//						return tc.getStyle();
-//				}
-//			}
-//		}
-//		return null;
-//	}
 	
 	@SubscribeEvent
     public static void onServerChat(ServerChatEvent e) {
 		if(!loaded) return; // Just do nothing until everything's ready to go!
-		 // Refresh the tab list
     	ServerPlayer player = e.getPlayer();
         UUID uuid = player.getUUID();
         String msg = e.getMessage().getString();
+		player.refreshTabListName();
 		if(msg.isEmpty()) return;
-		if (ConfigHandler.config.enableTimestamp.get() == false) {
-			tz = "Time in chat Disabled";
-		}else{
-			timestampFormat.setTimeZone(timeZone);
-			tz = ConfigHandler.config.setTimezone.get();
-		}	
-		String ts = " %s ".formatted(timeSeperator);
-		BetterForgeChat.LOGGER.debug("current time seperator {}", ts);
-		BetterForgeChat.LOGGER.debug("current time zone {}", tz);
-		String tstamp = timestampFormat == null ? "" : timestampFormat.format(new Date());
-		BetterForgeChat.LOGGER.debug("current time stamp {}",tstamp);
-		String name = BetterForgeChatUtilities.getRawPreferredPlayerName(player);
-		BetterForgeChat.LOGGER.debug("global message format: {}",chatMessageFormat);
-		String fmat = chatMessageFormat.replace("$time", tstamp+ts).replace("$name", name);
-		BetterForgeChat.LOGGER.debug("formatted: {}",fmat);
-		MutableComponent beforeMsg = Parser.parse(fmat.substring(0, fmat.indexOf("$msg")));
-		BetterForgeChat.LOGGER.debug("before message: {}", beforeMsg);
-		MutableComponent afterMsg = Parser.parse(fmat.substring(fmat.indexOf("$msg") + 4));
-		BetterForgeChat.LOGGER.debug("after message: {}", afterMsg);
+		String newMsg = chatMessageFormat;
+		
+		if (enableTimestamp && StringUtils.isNotBlank(timestampFormat)) {
+			SimpleDateFormat dateFormat;
+			dateFormat = new SimpleDateFormat(timestampFormat);
+			if (StringUtils.isNotBlank(timeZone)) dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+			String dateString = dateFormat.format(new Date());
+			if (StringUtils.isNotBlank(timeSeparator)) dateString += timeSeparator;
+			newMsg = newMsg.replace("$time", dateString);
+		} else {
+			newMsg = newMsg.replace("$time", "");
+		}
+		
+		newMsg = newMsg.replace("$name", BetterForgeChatUtilities.getRawPreferredPlayerName(player).strip());
+		newMsg = newMsg.replace("$msg", "&r" + msg);
+		
 		boolean enableColor = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.coloredChatNode);
 		boolean enableStyle = PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.styledChatNode);
+		boolean enableMarkdown = markdownEnabled && enableStyle && PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.markdownChatNode);
+		
+//		newMsg = newMsg.replaceAll(" +", " ");
+		MutableComponent newComponent = Parser.parse(newMsg, enableColor, enableStyle, enableMarkdown);
+		
 		
 		// Create an error message if the player isn't allowed to use styles/colors
 		String emsg = "";
-		if(!enableColor && Parser.containsFormatting(msg, true))
-			emsg = "You are not permitted to use colors";
-		if(!enableStyle && Parser.containsFormatting(msg, false))
-			emsg += !emsg.isEmpty() ? " or styles" : "You are not permitted to use styles";
-		if(!emsg.isEmpty()) {
-			MutableComponent ecmp = Component.literal(emsg + "!");
-			ecmp.withStyle(ChatFormatting.BOLD);
-			ecmp.withStyle(ChatFormatting.RED);
+		if(!enableColor && Parser.containsFormatting(msg, true)) emsg = "You are not permitted to use colors";
+		if(!enableStyle && Parser.containsFormatting(msg, false)) emsg += !emsg.isEmpty() ? " or styles" : "You are not permitted to use styles";
+		if(StringUtils.isNotBlank(emsg)) {
+			MutableComponent ecmp = Component.literal(emsg + "!").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED);
 			player.sendSystemMessage(ecmp);
 		}
-		// Convert markdown to normal essentials formatting
-		boolean parsedMarkdown = false;
-		if(markdownEnabled && enableStyle && PermissionsHandler.playerHasPermission(uuid, PermissionsHandler.markdownChatNode)) {
-			BetterForgeChat.LOGGER.debug("pre markdown formatted text: {}", msg);
-			parsedMarkdown = true;
-		}
-
-		// Start generating the main TextComponent
-		MutableComponent msgComp = parsedMarkdown
-				? Parser.parse(msg)
-				: Parser.parse(msg, enableColor, enableStyle);
-
-		// Append the hover and click event crap
-//		Style sty = getHoverClickEventStyle(e.getMessage());
-//		MutableComponent ecmp = Component.empty();
-//		if(sty != null && sty.getHoverEvent() != null)
-//			Component.empty().setStyle(sty);
 		e.setCanceled(true);
 		
-		MutableComponent newMessage = beforeMsg.append(msgComp.append(afterMsg));
-		
 		player.server.execute(() -> {
-            BetterForgeChat.LOGGER.info("[CHAT] {}", newMessage.getString());
-			broadcastMessage(player.serverLevel(), newMessage);
+            BetterForgeChat.LOGGER.info("[CHAT] {}", newComponent.getString());
+			broadcastMessage(player.serverLevel(), newComponent);
 		});
-		
     }
-	
 	private static void broadcastMessage(ServerLevel level, MutableComponent message) {
 		MinecraftServer server = level.getServer();
         for (ServerPlayer serverPlayer : server.getPlayerList().getPlayers()) {

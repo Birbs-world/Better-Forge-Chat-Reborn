@@ -30,11 +30,11 @@ public class PlayerEventHandler implements IReloadable {
 	
 	@SubscribeEvent
 	public static void onTabListNameFormatEvent(TabListNameFormat e) {
-		BetterForgeChat.LOGGER.debug("Retreaving Tab list formatting");
+		BetterForgeChat.LOGGER.debug("Retrieving Tab list formatting");
 		if(ConfigHandler.config.enableTabListIntegration.get() && e.getEntity() instanceof ServerPlayer) {
 			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
 			Player player = e.getEntity();
-			BetterForgeChat.LOGGER.debug("Tablist formatting for: "+ player);
+            BetterForgeChat.LOGGER.debug("Tablist formatting for: {}", player.getName());
 			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player,
 				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListNicknameNode),
 				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListMetadataNode)));
@@ -43,14 +43,16 @@ public class PlayerEventHandler implements IReloadable {
 	
 	@SubscribeEvent
 	public static void onNameFormatEvent(NameFormat e) {
-		if(e.getEntity() instanceof ServerPlayer)
-			e.setDisplayname(BetterForgeChatUtilities.getFormattedPlayerName(e.getEntity()));
+		// doesn't ever fire because PlayerEvent classes don't supply a ServerPlayer but we dream anyway
+		if(e.getEntity() instanceof ServerPlayer player) {
+			player.refreshTabListName();
+		}
 	}
 	@SubscribeEvent
 	public static void onSavePlayerData(SaveToFile e) {
 		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) {
             PlayerData.saveToDir(e.getPlayerDirectory());
-        }
+		}
 	}
 	@SubscribeEvent
 	public static void onLoadPlayerData(LoadFromFile e) {

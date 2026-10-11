@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.rvt.bfcrmod.BetterForgeChat;
 import com.rvt.bfcrmod.Parser;
 import com.rvt.bfcrmod.config.ConfigHandler;
+import com.rvt.bfcrmod.config.IReloadable;
 import com.rvt.bfcrmod.config.PermissionsHandler;
 import com.rvt.bfcrmod.config.PlayerData;
 import com.mojang.brigadier.CommandDispatcher;
@@ -20,7 +21,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
-public class NickCommands {
+public class NickCommands implements IReloadable {
 	private static boolean cfgWhoIsEnabled = false;
 	private static boolean cfgNickEnabled = false;
 	private static int minNicknameLength = -1;
@@ -28,7 +29,7 @@ public class NickCommands {
 	
 	public static boolean nicknameIntegrationEnabled = false;
 	
-	public static void reloadConfig() {
+	public void reloadConfigOptions() {
 		minNicknameLength = ConfigHandler.config.minimumNicknameLength.get();
 		maxNicknameLength = ConfigHandler.config.maximumNicknameLength.get();
 		if(minNicknameLength > maxNicknameLength) {
@@ -43,36 +44,28 @@ public class NickCommands {
 	}
 	public static void register(CommandDispatcher<CommandSourceStack> disp) {
 		/* /nick */
-		disp.register(Commands.literal("nick").requires((c) -> {
-			return (nicknameIntegrationEnabled || cfgNickEnabled) &&
-				(BfcCommands.checkPermission(c, PermissionsHandler.nickCommand));
-		}).executes((ctx) -> nickCommand(ctx, true, false)));
+		disp.register(Commands.literal("nick").requires((c) -> (nicknameIntegrationEnabled || cfgNickEnabled) &&
+            (BfcCommands.checkPermission(c, PermissionsHandler.nickCommand))).executes((ctx) -> nickCommand(ctx, true, false)));
 		/* /nick <nickname> */
-		disp.register(Commands.literal("nick").requires((c) -> {
-			return (nicknameIntegrationEnabled || cfgNickEnabled) &&
-				(BfcCommands.checkPermission(c, PermissionsHandler.nickCommand));
-		}).then(Commands.argument("nickname", StringArgumentType.greedyString())
+		disp.register(Commands.literal("nick").requires((c) -> (nicknameIntegrationEnabled || cfgNickEnabled) &&
+            (BfcCommands.checkPermission(c, PermissionsHandler.nickCommand))).then(Commands.argument("nickname", StringArgumentType.greedyString())
 			.executes((ctx) -> nickCommand(ctx, false, false))));
 		/* /nickfor <username> <nickname> */
-		disp.register(Commands.literal("nickfor").requires((c) -> {
-				return (nicknameIntegrationEnabled || cfgNickEnabled) &&
-					(BfcCommands.checkPermission(c, PermissionsHandler.nickOthersCommand)); })
+		disp.register(Commands.literal("nickfor").requires((c) -> (nicknameIntegrationEnabled || cfgNickEnabled) &&
+            (BfcCommands.checkPermission(c, PermissionsHandler.nickOthersCommand)))
 				.then(Commands.argument("username", StringArgumentType.string())
 				//.suggests((ctx, builder) -> SharedSuggestionProvider.sugg)
 				.then(Commands.argument("nickname", StringArgumentType.greedyString())
 				.executes((ctx) -> nickCommand(ctx, false, true)))));
 		/* /nickfor <username> */
-		disp.register(Commands.literal("nickfor").requires((c) -> {
-				return (nicknameIntegrationEnabled || cfgNickEnabled) &&
-					(BfcCommands.checkPermission(c, PermissionsHandler.nickOthersCommand)); })
+		disp.register(Commands.literal("nickfor").requires((c) -> (nicknameIntegrationEnabled || cfgNickEnabled) &&
+            (BfcCommands.checkPermission(c, PermissionsHandler.nickOthersCommand)))
 				.then(Commands.argument("username", StringArgumentType.string())
 				//.suggests((ctx, builder) -> SharedSuggestionProvider.sugg)
 				.executes((ctx) -> nickCommand(ctx, true, true))));
 		/* /whois <nickname> */
-		disp.register(Commands.literal("whois").requires((c) -> {
-				return (nicknameIntegrationEnabled || cfgWhoIsEnabled) && 
-					(BfcCommands.checkPermission(c, PermissionsHandler.whoisCommand));
-			}).then(Commands.argument("displayname", StringArgumentType.string())
+		disp.register(Commands.literal("whois").requires((c) -> (nicknameIntegrationEnabled || cfgWhoIsEnabled) &&
+            (BfcCommands.checkPermission(c, PermissionsHandler.whoisCommand))).then(Commands.argument("displayname", StringArgumentType.string())
 				.executes(NickCommands::whoisCommand)));
 	}
 
@@ -82,11 +75,10 @@ public class NickCommands {
 			user = user.trim().toLowerCase();
 			List<ServerPlayer> players = serv.getPlayerList().getPlayers();
 			for(ServerPlayer player : players) {
-				Player prof = player;
-                String uname = prof.getName().getContents().toString().toLowerCase();
-                if(user.equals(uname)) return prof;
-                String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(prof).trim().toLowerCase();
-                if(user.equals(Parser.stripFormatting(nname))) return prof;
+                String uname = player.getName().getContents().toString().toLowerCase();
+                if(user.equals(uname)) return player;
+                String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(player).trim().toLowerCase();
+                if(user.equals(Parser.stripFormatting(nname))) return player;
             }
 		}
 		return null;

@@ -21,8 +21,7 @@ public class ExternalModLoadingEvent {
 		loadIntegratedNicknameProvider();
 	}
 	private static void loadIntegratedNicknameProvider() {
-		if (BetterForgeChat.instance.nicknameProvider == null && 
-				ConfigHandler.config.autoEnableChatNicknameCommand.get()) {
+		if (BetterForgeChat.instance.nicknameProvider == null && ConfigHandler.config.autoEnableChatNicknameCommand.get()) {
 			BetterForgeChat.instance.nicknameProvider = new IntegratedNicknameProvider();
 			NickCommands.nicknameIntegrationEnabled = true;
     		BetterForgeChat.LOGGER.info("Integrated nickname management enabled successfully!");
