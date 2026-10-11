@@ -54,8 +54,7 @@ public class Parser implements IReloadable {
     public static MutableComponent parse(String input, boolean enableColors, boolean enableStyles, boolean enableMarkdown) {
         MutableComponent output = Component.empty();
         if(input == null || input.isEmpty()) return output;
-        input = input.stripLeading();
-        if(input.isEmpty()) return output;
+//        if(input.isEmpty()) return output;
         
         List<Marker> markers = configuredMarkers();
         ParserState state = new ParserState();
@@ -149,7 +148,7 @@ public class Parser implements IReloadable {
                 continue;
             }
             ChatFormatting format = ChatFormatting.getByCode(input.charAt(i + 1));
-            if(format != null && (colors ? format.isColor() : !format.isColor())) return true;
+            if(format != null && (colors == format.isColor())) return true;
         }
         return false;
     }

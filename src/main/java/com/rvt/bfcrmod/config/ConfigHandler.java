@@ -3,6 +3,8 @@ package com.rvt.bfcrmod.config;
 import net.minecraft.ChatFormatting;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.util.TimeZone;
+
 public class ConfigHandler {
 	private static final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 	public static final ConfigBuilder config = new ConfigBuilder(builder);
@@ -14,7 +16,7 @@ public class ConfigHandler {
 		public final ModConfigSpec.EnumValue<ChatFormatting> chatMessageColor;
 		public final ModConfigSpec.ConfigValue<String> timestampFormat;
 		public final ModConfigSpec.ConfigValue<String> setTimezone;
-		public final ModConfigSpec.ConfigValue<String> timeSeperator;
+		public final ModConfigSpec.ConfigValue<String> timeSeparator;
 		public final ModConfigSpec.IntValue maximumNicknameLength;
 		public final ModConfigSpec.IntValue minimumNicknameLength;
 		public final ModConfigSpec.BooleanValue enableTimestamp;
@@ -46,7 +48,7 @@ public class ConfigHandler {
 							 $prefix is replaced by the user's prefix or nothing if the user has no prefix
 							 $suffix is replaced by the user's suffix or nothing if the user has no suffix
 							 $name is replaced by the user's name, or nickname if they have one""")
-					.define("playerNameFormat", "$prefix$name$suffix");
+					.define("playerNameFormat", "$prefix $name $suffix");
 			chatMessageFormat = builder
 					.comment("""
 							 Controls the chat message format
@@ -54,26 +56,26 @@ public class ConfigHandler {
 							 $name is replaced by the user's name, or nickname if they have one
 							 colors can be uses in the formatting string. for a global message color see next section
 							 $msg is replaced by the username's message (if you use it more then once it WILL break this mod)""")
-					.define("chatMessageFormat", "$time $name: $msg");
+					.define("chatMessageFormat", "$time$name: $msg");
 			chatMessageColor = builder.comment("Sets the global color of the chat messages").defineEnum("chatMessageColor", ChatFormatting.WHITE);
 			timestampFormat = builder
 					.comment("""
 							 Timestamp format following the java SimpleDateFormat
 							 Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html""")
 					.define("timestampFormat", "HH:mm");
-			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", true);
+			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", false);
 			setTimezone = builder
 					.comment("""
 								Set server timezone for BFCR chat messages
-								Uses TZ idenitifer e.g. Pacific/Auckland
+								Uses TZ identifier e.g. Pacific/Auckland
 								To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
-					.define("setTimezone","Pacific/Auckland");
-			timeSeperator = builder.comment("set seperator character").define("timeseperator","|");
+					.define("setTimezone","Factory", s -> TimeZone.getTimeZone((String) s) != null);
+			timeSeparator = builder.comment("Set separator character").define("timeSeparator","|");
 			enableFtbEssentials = builder.comment("Enables or disables FTB essentials nickname integration").define("useFtbEssentials", true);
 			enableLuckPerms = builder.comment("Enables or disables LuckPerms integration").define("useLuckPerms", true);
 			enableMarkdown = builder.comment("Enables or disables markdown styling").define("markdownEnabled", true);
 			enableTabListIntegration = builder.comment("Enables or disables custom tab list information").define("tabList", true);
-			enableMetadataInTabList = builder.comment("Enables or disables prefixes&suffixes in the tab list").define("tabListMetadata", true);
+			enableMetadataInTabList = builder.comment("Enables or disables prefixes & suffixes in the tab list").define("tabListMetadata", true);
 			enableNicknamesInTabList = builder.comment("Enables or disables nicknames in the tab list").define("tabListNicknames", true);
 			enableWhoisCommand = builder.comment("""
 				  Enables or disables the integrated whois command
@@ -121,8 +123,7 @@ public class ConfigHandler {
 		}
 		
 		private boolean checkLength(Object string) {
-			String s =  (String)string;
-			return s.length() <= 2;
+			return string != null && ((String)string).length() <= 2;
 		}
 	}
 }
