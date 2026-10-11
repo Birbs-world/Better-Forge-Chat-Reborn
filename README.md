@@ -8,15 +8,15 @@ This version is for MC1.20.1 and up. For MC1.18.2 The Original owner no longer h
 ![screenshots/Screenshot 2026-10-11 163034.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/HexColorChat.png)
 
 ### LuckPerms integration
-![screenshots/LuckPermsIntegration.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/LuckPermsIntegration.png)
+![screenshots/LuckPermsIntegration.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/LuckPermsIntegration.png)
 ### Tab list integration
-![screenshots/TabListIntegration.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/TabListIntegration.png)
+![screenshots/TabListIntegration.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/TabListIntegration.png)
 ### Nickname integration
-![screenshots/NicknameAndGroupIntegreation.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/NicknameAndGroupIntegreation.png)
+![screenshots/NicknameAndGroupIntegreation.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/NicknameAndGroupIntegreation.png)
 ### Colors command
-![screenshots/ColorsCommand.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/ColorsCommand.png)
+![screenshots/ColorsCommand.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/ColorsCommand.png)
 ### Markdown support
-![screenshots/MarkdownSupport.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/MarkdownSupport.png)
+![screenshots/MarkdownSupport.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/MarkdownSupport.png)
 ## Miscellaneous features
  - Works with any (Neo)Forge Permissions plugin to provide easy permission management, see the permissions [on the WiKi](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/wiki)
  - Integrated nickname commands (if not using forge essentials)
