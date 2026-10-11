@@ -4,6 +4,9 @@ A Forge based server-side chat mod to allow prefixes, suffixes and integration w
 This version is for MC1.20.1 and up. For MC1.18.2 The Original owner no longer has the time to maintain it and has given it over to us to maintain going forward.
 
 ## Features
+### Hex based colors
+![screenshots/Screenshot 2026-10-11 163034.png](https://raw.githubusercontent.com/Birbs-world/Better-Forge-Chat-Reborn/refs/heads/neoforge-1.21.1/screenshots/HexColorChat.png)
+
 ### LuckPerms integration
 ![screenshots/LuckPermsIntegration.png](https://github.com/Birbs-world/Better-Forge-Chat-Reborn/raw/main/screenshots/LuckPermsIntegration.png)
 ### Tab list integration
