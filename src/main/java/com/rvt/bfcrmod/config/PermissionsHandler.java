@@ -16,7 +16,7 @@ import net.neoforged.neoforge.server.permission.nodes.PermissionDynamicContext;
 import net.neoforged.neoforge.server.permission.nodes.PermissionNode;
 import net.neoforged.neoforge.server.permission.nodes.PermissionTypes;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid = BetterForgeChat.MODID)
 public class PermissionsHandler {	
 	public static PermissionNode<Boolean> coloredChatNode = 
 			ezyPermission("chat.colors", "Chat colors", "Enables/Disables colors in chat");
@@ -48,7 +48,7 @@ public class PermissionsHandler {
 				try { // Fuck adding all these nodes manually
 					pge.addNodes((PermissionNode<?>) fld.get(PermissionNode.class));
 				} catch (Exception e) {
-					BetterForgeChat.LOGGER.error("Exception: "+ e + " Caught on adding permission nodes");
+                    BetterForgeChat.LOGGER.error("Exception: {} Caught on adding permission nodes", String.valueOf(e));
 				}
 			}
 		}

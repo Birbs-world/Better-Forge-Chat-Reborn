@@ -2,32 +2,32 @@ package com.rvt.bfcrmod.config;
 
 import java.util.ArrayList;
 
-//import com.rvt.bfcrmod.BetterForgeChat;
-//import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.event.server.ServerStartedEvent;
+import com.rvt.bfcrmod.BetterForgeChat;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.event.config.ModConfigEvent.Reloading;
 
+@EventBusSubscriber(modid = BetterForgeChat.MODID)
 public class ConfigurationEventHandler {
-	private final ArrayList<IReloadable> reloadables = new ArrayList<>();
+	private static final ArrayList<IReloadable> reloadables = new ArrayList<>();
 	
-	public void registerReloadable(IReloadable rel) {
+	public static void registerReloadable(IReloadable rel) {
 		reloadables.add(rel);
 	}
 	
-	public void reloadConfigOptions() {
+	public static void reloadConfigOptions() {
 		for(IReloadable reloadable : reloadables)
 			if(reloadable != null)
 				reloadable.reloadConfigOptions();
 	}
 
-	@SubscribeEvent//IModBusEvent
-	public void onModConfigReloadingEvent(Reloading e) {
+	@SubscribeEvent
+	public static void onModConfigReloadingEvent(ModConfigEvent.Reloading e) {
 		reloadConfigOptions();
 	}
 
-	@SubscribeEvent //IEventBus
-	public void onServerStarted(ServerStartedEvent e) {
+	@SubscribeEvent
+	public static void onServerStarted(ModConfigEvent.Loading e) {
 		reloadConfigOptions();
 	}
 

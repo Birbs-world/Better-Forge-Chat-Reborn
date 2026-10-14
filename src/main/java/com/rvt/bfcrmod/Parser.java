@@ -14,6 +14,7 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.chat.Style;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 public class Parser implements IReloadable {
     private static final int MAX_SYMBOL_LENGTH = 2;
@@ -272,7 +273,7 @@ public class Parser implements IReloadable {
     private record Marker(String token, List<InlineFormat> formats) {}
     
     private static class ParserState {
-        private final ChatFormatting defaultColor = configuredDefaultColor();
+        private final ChatFormatting defaultColor = ChatEventHandler.getChatMessageColor();
         private Style legacyStyle = Style.EMPTY.withColor(defaultColor);
         private int boldDepth;
         private int italicDepth;

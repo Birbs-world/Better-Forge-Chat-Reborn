@@ -3,6 +3,8 @@ package com.rvt.bfcrmod.config;
 import net.minecraft.ChatFormatting;
 import net.neoforged.neoforge.common.ModConfigSpec;
 
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.TimeZone;
 
 public class ConfigHandler {
@@ -26,6 +28,7 @@ public class ConfigHandler {
 		public final ModConfigSpec.BooleanValue enableTabListIntegration;
 		public final ModConfigSpec.BooleanValue enableMetadataInTabList;
 		public final ModConfigSpec.BooleanValue enableNicknamesInTabList;
+		public final ModConfigSpec.BooleanValue enableNameTagIntegration;
 		public final ModConfigSpec.BooleanValue enableWhoisCommand;
 		public final ModConfigSpec.BooleanValue enableChatNicknameCommand;
 		public final ModConfigSpec.BooleanValue autoEnableChatNicknameCommand;
@@ -62,14 +65,14 @@ public class ConfigHandler {
 					.comment("""
 							 Timestamp format following the java SimpleDateFormat
 							 Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html""")
-					.define("timestampFormat", "HH:mm");
+					.define("timestampFormat", "HH:mm", s -> { try { new SimpleDateFormat((String) s); } catch (Exception ignored) { return false; } return true; });
 			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", false);
 			setTimezone = builder
 					.comment("""
 								Set server timezone for BFCR chat messages
 								Uses TZ identifier e.g. Pacific/Auckland
 								To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
-					.define("setTimezone","Factory", s -> TimeZone.getTimeZone((String) s) != null);
+					.defineInList("setTimezone","UTC", List.of(TimeZone.getAvailableIDs()));
 			timeSeparator = builder.comment("Set separator character").define("timeSeparator","|");
 			enableFtbEssentials = builder.comment("Enables or disables FTB essentials nickname integration").define("useFtbEssentials", true);
 			enableLuckPerms = builder.comment("Enables or disables LuckPerms integration").define("useLuckPerms", true);
@@ -77,6 +80,9 @@ public class ConfigHandler {
 			enableTabListIntegration = builder.comment("Enables or disables custom tab list information").define("tabList", true);
 			enableMetadataInTabList = builder.comment("Enables or disables prefixes & suffixes in the tab list").define("tabListMetadata", true);
 			enableNicknamesInTabList = builder.comment("Enables or disables nicknames in the tab list").define("tabListNicknames", true);
+			enableNameTagIntegration = builder.comment("""
+					Enables or disables nicknames overwriting name tags.
+					ONLY WORKS WHEN THE MOD IS INSTALLED ON THE CLIENT AS WELL""").define("enableNameTagIntegration", false);
 			enableWhoisCommand = builder.comment("""
 				  Enables or disables the integrated whois command
 				  (If autoIntegratedNicknames is true, this setting is ignored)""").define("enableWhoisCommand", true);
@@ -85,7 +91,7 @@ public class ConfigHandler {
 					(If autoIntegratedNicknames is true, this setting is ignored)""").define("enableIntegratedNicknames", false);
 			autoEnableChatNicknameCommand = builder.comment("When true, enables the integrated nickname-related commands if FTB essentials is not present").define("autoIntegratedNicknames", true);
 			maximumNicknameLength = builder.comment("Maximum allowed nickname length (for integrated nickname commands)").defineInRange("maximumNicknameLength", 50, 1, 500);
-			minimumNicknameLength = builder.comment("Minimum allowed nickname length (for integrated nickname commands)").defineInRange("minimumNicknameLength", 1, 1, 500);
+			minimumNicknameLength = builder.comment("Minimum allowed nickname length (for integrated nickname commands)").defineInRange("minimumNicknameLength", 3, 1, 500);
 			builder.push("Delimiters");
 			
 			boldSymbol1 = builder
