@@ -80,7 +80,9 @@ public class ConfigHandler {
 			enableTabListIntegration = builder.comment("Enables or disables custom tab list information").define("tabList", true);
 			enableMetadataInTabList = builder.comment("Enables or disables prefixes & suffixes in the tab list").define("tabListMetadata", true);
 			enableNicknamesInTabList = builder.comment("Enables or disables nicknames in the tab list").define("tabListNicknames", true);
-			enableNameTagIntegration = builder.comment("Enables or disables nicknames overwriting name tags").define("enableNameTagIntegration", false);
+			enableNameTagIntegration = builder.comment("""
+					Enables or disables nicknames overwriting name tags.
+					ONLY WORKS WHEN THE MOD IS INSTALLED ON THE CLIENT AS WELL""").define("enableNameTagIntegration", false);
 			enableWhoisCommand = builder.comment("""
 				  Enables or disables the integrated whois command
 				  (If autoIntegratedNicknames is true, this setting is ignored)""").define("enableWhoisCommand", true);

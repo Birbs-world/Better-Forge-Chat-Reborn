@@ -64,7 +64,7 @@ side="SERVER"
 [[dependencies."${mod_id}"]]
 modId="tabnametag"
 type="incompatible"
-reason="This mod already implements the same behavior as Tab Name Tag."
+reason="BFCR implements the same behavior as Tab Name Tag."
 versionRange="[0.1.0,)"
 ordering="NONE"
 side="BOTH"

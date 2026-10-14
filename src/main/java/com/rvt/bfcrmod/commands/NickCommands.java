@@ -14,11 +14,13 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 
+import com.rvt.bfcrmod.events.PlayerEventHandler;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class NickCommands implements IReloadable {
@@ -95,15 +97,17 @@ public class NickCommands implements IReloadable {
 			return 0;
 		}
 	}
-	private static int assignNickname(CommandContext<CommandSourceStack> ctx, UUID uuid, String nick) {
+	private static int assignNickname(CommandContext<CommandSourceStack> ctx, Player player, String nick) {
 		if(nick == null) {
 			ctx.getSource().sendSuccess(()-> Parser.parse("&eNickname reset!&r"), false);
-			PlayerData.setNickname(uuid, null);
+			PlayerData.setNickname(player.getUUID(), null);
+			PlayerEventHandler.onNameFormatEvent(new PlayerEvent.NameFormat(player, Parser.parse(nick)));
 			return 1;
 		} else {
 			if(Parser.parse(nick).getString().length() >= minNicknameLength && Parser.parse(nick).getString().length() <= maxNicknameLength) {
 				ctx.getSource().sendSuccess(()-> Parser.parse("&eNickname set to \"" + nick + "&r&e\"!&r"), false);
-				PlayerData.setNickname(uuid, nick);
+				PlayerData.setNickname(player.getUUID(), nick);
+				PlayerEventHandler.onNameFormatEvent(new PlayerEvent.NameFormat(player, Parser.parse(nick)));
 				return 1;
 			} else {
 				ctx.getSource().sendFailure(Parser.parse("&cNickname must be between " + minNicknameLength + " and " + maxNicknameLength + " characters!&r"));
@@ -120,12 +124,12 @@ public class NickCommands implements IReloadable {
 		String user = other ? StringArgumentType.getString(ctx, "username") : null;
 		/* /nick OR /nick <nickname> */
 		if(player != null && user == null) 
-			return assignNickname(ctx, player.getUUID(), nick);
+			return assignNickname(ctx, player, nick);
 		/* /nickfor <user> OR /nickfor <user> <nickname> */
 		if(user != null) {
 			Player prof = lookupPlayer(user);
 			if(prof != null) {
-				return assignNickname(ctx, prof.getUUID() , nick);
+				return assignNickname(ctx, prof, nick);
 			} else {
 				ctx.getSource().sendFailure(Parser.parse("&cUnknown player: \"" + user + "\"!&r"));
 				return 0;

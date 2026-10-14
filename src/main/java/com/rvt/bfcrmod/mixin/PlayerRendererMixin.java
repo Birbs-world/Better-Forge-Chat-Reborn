@@ -18,14 +18,7 @@ public abstract class PlayerRendererMixin {
         at = @At("HEAD"),
         argsOnly = true
     )
-    protected Component renderNameTag(Component name, AbstractClientPlayer abstractClientPlayer, Component originalName, PoseStack poseStack, MultiBufferSource multiBufferSource, int i) {
-        Minecraft client = Minecraft.getInstance();
-        if (client.player == null || !PlayerEventHandler.getEnableNameTagIntegration()) return name;
-
-        return client.player.connection.getOnlinePlayers().stream()
-            .filter(p -> p.getProfile().getId().equals(abstractClientPlayer.getUUID()))
-            .findFirst()
-            .map(p -> p.getTabListDisplayName() != null ? p.getTabListDisplayName() : name)
-            .orElse(abstractClientPlayer.getDisplayName());
+    protected Component renderNameTag(Component name, AbstractClientPlayer abstractClientPlayer, Component originalName, PoseStack poseStack, MultiBufferSource multiBufferSource) {
+        return PlayerEventHandler.getEnableNameTagIntegration() ? abstractClientPlayer.getCustomName() : name;
     }
 }

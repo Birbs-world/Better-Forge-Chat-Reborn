@@ -17,6 +17,7 @@ import net.neoforged.neoforge.event.entity.player.PlayerEvent.SaveToFile;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.TabListNameFormat;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import org.jetbrains.annotations.NotNull;
 
 @EventBusSubscriber(modid = BetterForgeChat.MODID)
 public class PlayerEventHandler implements IReloadable {
@@ -38,35 +39,37 @@ public class PlayerEventHandler implements IReloadable {
 	
 	@SubscribeEvent
 	public static void onTabListNameFormatEvent(TabListNameFormat e) {
-		BetterForgeChat.LOGGER.debug("Retrieving Tab list formatting");
-		if(enableTabListIntegration && e.getEntity() instanceof ServerPlayer) {
-			BetterForgeChat.LOGGER.debug("Tablist formatting enabled");
-			Player player = e.getEntity();
-            BetterForgeChat.LOGGER.debug("Tablist formatting for: {}", player.getName());
-			e.setDisplayName(BetterForgeChatUtilities.getFormattedPlayerName(player,
-				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListNicknameNode),
-				enableMetadataInTabList  && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListMetadataNode)));
+		if(enableTabListIntegration && (e.getEntity() instanceof ServerPlayer player)) {
+			reloadPlayerName(player, false);
+			e.setDisplayName(player.getCustomName());
 		}
 	}
 	
 	@SubscribeEvent
 	public static void onNameFormatEvent(NameFormat e) {
-		// doesn't ever fire because PlayerEvent classes don't supply a ServerPlayer but we dream anyway
-		if(e.getEntity() instanceof ServerPlayer player)
+		if(e.getEntity() instanceof ServerPlayer player) {
+			reloadPlayerName(player, false);
 			player.refreshTabListName();
-		
+		}
 	}
 	@SubscribeEvent
 	public static void onSavePlayerData(SaveToFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) {
-            PlayerData.saveToDir(e.getPlayerDirectory());
-		}
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.saveToDir(e.getPlayerDirectory());
 	}
 	@SubscribeEvent
 	public static void onLoadPlayerData(LoadFromFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) {
-			BetterForgeChat.LOGGER.debug("loading player data from file");
-			PlayerData.loadFromDir(e.getPlayerDirectory());
+		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.loadFromDir(e.getPlayerDirectory());
+	}
+	
+	public static void reloadPlayerName(@NotNull ServerPlayer player, boolean refresh) {
+		BetterForgeChat.LOGGER.debug("Refreshing player name!");
+		if (refresh) {
+			player.refreshTabListName();
+			player.refreshDisplayName();
 		}
+		player.setCustomName(BetterForgeChatUtilities.getFormattedPlayerName(player,
+				enableNicknamesInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListNicknameNode),
+				enableMetadataInTabList && PermissionsHandler.playerHasPermission(player.getUUID(), PermissionsHandler.tabListMetadataNode)));
+		player.setCustomNameVisible(true);
 	}
 }

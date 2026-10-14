@@ -57,7 +57,6 @@ public class ChatEventHandler implements IReloadable {
     	ServerPlayer player = e.getPlayer();
         UUID uuid = player.getUUID();
         String msg = e.getMessage().getString();
-		player.refreshTabListName();
 		if(msg.isEmpty()) return;
 		String newMsg = chatMessageFormat;
 		
