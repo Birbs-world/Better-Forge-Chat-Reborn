@@ -104,10 +104,8 @@ public class PlayerData {
 			fis.close();
 		} catch(IOException|NullPointerException e) {
 			BetterForgeChat.LOGGER.trace("Failed to load {} \n{}", dataFile.getAbsolutePath(),e);
-		} finally {
-			
 		}
-	}
+    }
 	public static void saveToDir(File playerDirectory) {
 		BetterForgeChat.LOGGER.debug("current playerdata map: {}",map);
 		File dataFile = new File(playerDirectory, playerDataFileName);

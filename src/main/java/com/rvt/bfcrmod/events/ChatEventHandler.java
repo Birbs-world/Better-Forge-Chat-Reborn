@@ -48,7 +48,6 @@ public class ChatEventHandler implements IReloadable {
 	}
 
 	public static ChatFormatting getChatMessageColor() {
-		BetterForgeChat.LOGGER.debug("Chat color from config: {}",chatMessageColor);
 		return chatMessageColor;
 	}
 	
@@ -62,10 +61,10 @@ public class ChatEventHandler implements IReloadable {
 		if(msg.isEmpty()) return;
 		String newMsg = chatMessageFormat;
 		
-		if (enableTimestamp && StringUtils.isNotBlank(timestampFormat)) {
+		if (enableTimestamp && StringUtils.isNotBlank(timestampFormat) && StringUtils.isNotBlank(timeZone)) {
 			SimpleDateFormat dateFormat;
 			dateFormat = new SimpleDateFormat(timestampFormat);
-			if (StringUtils.isNotBlank(timeZone)) dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
+			dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
 			String dateString = dateFormat.format(new Date());
 			if (StringUtils.isNotBlank(timeSeparator)) dateString += timeSeparator;
 			newMsg = newMsg.replace("$time", dateString);
@@ -87,9 +86,9 @@ public class ChatEventHandler implements IReloadable {
 		// Create an error message if the player isn't allowed to use styles/colors
 		String emsg = "";
 		if(!enableColor && Parser.containsFormatting(msg, true)) emsg = "You are not permitted to use colors";
-		if(!enableStyle && Parser.containsFormatting(msg, false)) emsg += !emsg.isEmpty() ? " or styles" : "You are not permitted to use styles";
+		if(!enableStyle && Parser.containsFormatting(msg, false)) emsg += StringUtils.isNotBlank(emsg) ? " or styles" : "You are not permitted to use styles";
 		if(StringUtils.isNotBlank(emsg)) {
-			MutableComponent ecmp = Component.literal(emsg + "!").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.RED);
+			MutableComponent ecmp = Component.literal(emsg + "!").withStyle(ChatFormatting.RED);
 			player.sendSystemMessage(ecmp);
 		}
 		e.setCanceled(true);

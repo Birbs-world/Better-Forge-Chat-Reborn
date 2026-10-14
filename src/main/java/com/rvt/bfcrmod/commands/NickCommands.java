@@ -29,6 +29,7 @@ public class NickCommands implements IReloadable {
 	
 	public static boolean nicknameIntegrationEnabled = false;
 	
+	@Override
 	public void reloadConfigOptions() {
 		minNicknameLength = ConfigHandler.config.minimumNicknameLength.get();
 		maxNicknameLength = ConfigHandler.config.maximumNicknameLength.get();
@@ -76,9 +77,9 @@ public class NickCommands implements IReloadable {
 			List<ServerPlayer> players = serv.getPlayerList().getPlayers();
 			for(ServerPlayer player : players) {
                 String uname = player.getName().getContents().toString().toLowerCase();
-                if(user.equals(uname)) return player;
-                String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(player).trim().toLowerCase();
-                if(user.equals(Parser.stripFormatting(nname))) return player;
+				if(user.equals(uname)) return player;
+				String nname = BetterForgeChat.instance.nicknameProvider.getPlayerNickname(player).trim().toLowerCase();
+				if(user.equals(Parser.stripFormatting(nname))) return player;
             }
 		}
 		return null;
@@ -87,7 +88,7 @@ public class NickCommands implements IReloadable {
 		String user = StringArgumentType.getString(ctx, "displayname");
 		Player prof = lookupPlayer(user);
 		if(prof != null) {
-			ctx.getSource().sendSuccess(()-> Parser.parse("&eFound a name matching " + user + ": \"" + prof.getName() + "\"\n&eUUID: " + prof.getId() + "&r"), false);
+			ctx.getSource().sendSuccess(()-> Parser.parse("&eFound a name matching " + user + ": \"" + prof.getName() + "\"\n&eUUID: " + prof.getStringUUID() + "&r"), false);
 			return 1;
 		} else {
 			ctx.getSource().sendFailure(Parser.parse("&cUnknown username/nickname!&r"));
@@ -100,12 +101,12 @@ public class NickCommands implements IReloadable {
 			PlayerData.setNickname(uuid, null);
 			return 1;
 		} else {
-			if(nick.length() >= minNicknameLength && nick.length() <= maxNicknameLength) {
+			if(Parser.parse(nick).getString().length() >= minNicknameLength && Parser.parse(nick).getString().length() <= maxNicknameLength) {
 				ctx.getSource().sendSuccess(()-> Parser.parse("&eNickname set to \"" + nick + "&r&e\"!&r"), false);
 				PlayerData.setNickname(uuid, nick);
 				return 1;
 			} else {
-				ctx.getSource().sendFailure(Parser.parse("&cNickname must be between 1 and 50 characters!&r"));
+				ctx.getSource().sendFailure(Parser.parse("&cNickname must be between " + minNicknameLength + " and " + maxNicknameLength + " characters!&r"));
 				return 0;
 			}
 		}
