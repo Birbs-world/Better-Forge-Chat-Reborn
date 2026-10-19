@@ -35,7 +35,7 @@ public class BetterForgeChatUtilities implements IReloadable {
 			BetterForgeChat.LOGGER.warn("Could not get playerNameFormat from configuration file, please post issue on GitHub!");
 			return player.getName().getString();
 		} else {
-			String playerNameFormatted = fmat.replace("$prefix", pfx.strip()).replace("$name", name).replace("$suffix", sfx.strip());
+			String playerNameFormatted = fmat.replace("$prefix", pfx.strip()).replace("$name", name).replace("$suffix", sfx.strip()).strip();
 			BetterForgeChat.LOGGER.debug("player name formatted to: {}",playerNameFormatted);
 			return playerNameFormatted;
 		}

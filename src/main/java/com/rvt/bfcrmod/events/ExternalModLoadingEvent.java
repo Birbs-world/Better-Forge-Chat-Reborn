@@ -13,7 +13,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLEnvironment;
 
-@EventBusSubscriber
+@EventBusSubscriber(modid =  BetterForgeChat.MODID)
 public class ExternalModLoadingEvent {
 	@SubscribeEvent public static void onServerStarted(ServerStartedEvent e) {
 		loadLuckPerms();
