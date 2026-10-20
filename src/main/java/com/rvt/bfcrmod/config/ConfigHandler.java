@@ -11,11 +11,12 @@ public class ConfigHandler {
 	private static final ModConfigSpec.Builder builder = new ModConfigSpec.Builder();
 	public static final ConfigBuilder config = new ConfigBuilder(builder);
 	public static ModConfigSpec spec = builder.build();
+	public enum CHAT_COLORS { WHITE, GRAY, DARK_GRAY, BLACK, DARK_RED, RED, GOLD, YELLOW, GREEN, DARK_GREEN, DARK_BLUE, BLUE, DARK_AQUA, AQUA, LIGHT_PURPLE, DARK_PURPLE }
 	
 	public static class ConfigBuilder {
 		public final ModConfigSpec.ConfigValue<String> playerNameFormat;
 		public final ModConfigSpec.ConfigValue<String> chatMessageFormat;
-		public final ModConfigSpec.EnumValue<ChatFormatting> chatMessageColor;
+		public final ModConfigSpec.EnumValue<CHAT_COLORS> chatMessageColor;
 		public final ModConfigSpec.ConfigValue<String> timestampFormat;
 		public final ModConfigSpec.ConfigValue<String> setTimezone;
 		public final ModConfigSpec.ConfigValue<String> timeSeparator;
@@ -47,48 +48,50 @@ public class ConfigHandler {
 //			builder.push("BetterNeoForgeChatModConfig");
 			playerNameFormat = builder
 					.comment("""
-							 Controls the chat message format
-							 $prefix is replaced by the user's prefix or nothing if the user has no prefix
-							 $suffix is replaced by the user's suffix or nothing if the user has no suffix
-							 $name is replaced by the user's name, or nickname if they have one""")
+						Controls the chat message format
+						$prefix is replaced by the user's prefix or nothing if the user has no prefix
+						$suffix is replaced by the user's suffix or nothing if the user has no suffix
+						$name is replaced by the user's name, or nickname if they have one""")
 					.define("playerNameFormat", "$prefix $name $suffix");
 			chatMessageFormat = builder
 					.comment("""
-							 Controls the chat message format
-							 $time is replaced by the timestamp field or nothing if disabled
-							 $name is replaced by the user's name, or nickname if they have one
-							 colors can be uses in the formatting string. for a global message color see next section
-							 $msg is replaced by the username's message (if you use it more then once it WILL break this mod)""")
+						Controls the chat message format
+						$time is replaced by the timestamp field or nothing if disabled
+						$name is replaced by the user's name, or nickname if they have one
+						colors can be uses in the formatting string. for a global message color see next section
+						$msg is replaced by the username's message (if you use it more then once it WILL break this mod)""")
 					.define("chatMessageFormat", "$time$name: $msg");
-			chatMessageColor = builder.comment("Sets the global color of the chat messages").defineEnum("chatMessageColor", ChatFormatting.WHITE);
+			chatMessageColor = builder.comment("Sets the global color of the chat messages").defineEnum("chatMessageColor", CHAT_COLORS.WHITE);
 			timestampFormat = builder
 					.comment("""
-							 Timestamp format following the java SimpleDateFormat
-							 Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html""")
+						Timestamp format following the java SimpleDateFormat
+						Read more here: https://docs.oracle.com/javase/7/docs/api/java/text/SimpleDateFormat.html""")
 					.define("timestampFormat", "HH:mm", s -> { try { new SimpleDateFormat((String) s); } catch (Exception ignored) { return false; } return true; });
 			enableTimestamp = builder.comment("Enables or disables the filling in of timestamps").define("enableTimestamp", false);
 			setTimezone = builder
 					.comment("""
-								Set server timezone for BFCR chat messages
-								Uses TZ identifier e.g. Pacific/Auckland
-								To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
-					.defineInList("setTimezone","UTC", List.of(TimeZone.getAvailableIDs()));
+						Set server timezone for BFCR chat messages
+						Uses TZ identifier e.g. Pacific/Auckland
+						To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
+					.defineInList("setTimezone","UTC", getTimezones());
 			timeSeparator = builder.comment("Set separator character").define("timeSeparator","|");
-			enableFtbEssentials = builder.comment("Enables or disables FTB essentials nickname integration").define("useFtbEssentials", true);
+			enableFtbEssentials = builder.comment("""
+						Enables or disables FTB essentials nickname integration.
+						DOES NOT SEEM TO WORK IN SOME CASES!""").define("useFtbEssentials", false);
 			enableLuckPerms = builder.comment("Enables or disables LuckPerms integration").define("useLuckPerms", true);
 			enableMarkdown = builder.comment("Enables or disables markdown styling").define("markdownEnabled", true);
 			enableTabListIntegration = builder.comment("Enables or disables custom tab list information").define("tabList", true);
 			enableMetadataInTabList = builder.comment("Enables or disables prefixes & suffixes in the tab list").define("tabListMetadata", true);
 			enableNicknamesInTabList = builder.comment("Enables or disables nicknames in the tab list").define("tabListNicknames", true);
 			enableNameTagIntegration = builder.comment("""
-					Enables or disables nicknames overwriting name tags.
-					ONLY WORKS WHEN THE MOD IS INSTALLED ON THE CLIENT AS WELL""").define("enableNameTagIntegration", false);
+						Enables or disables nicknames overwriting name tags.
+						ONLY WORKS WHEN THE MOD IS INSTALLED ON THE CLIENT AS WELL!""").define("enableNameTagIntegration", true);
 			enableWhoisCommand = builder.comment("""
-				  Enables or disables the integrated whois command
-				  (If autoIntegratedNicknames is true, this setting is ignored)""").define("enableWhoisCommand", true);
+						Enables or disables the integrated whois command
+						(If autoIntegratedNicknames is true, this setting is ignored)""").define("enableWhoisCommand", true);
 			enableChatNicknameCommand = builder.comment("""
-					Enables or disables the integrated nickname command
-					(If autoIntegratedNicknames is true, this setting is ignored)""").define("enableIntegratedNicknames", false);
+						Enables or disables the integrated nickname command
+						(If autoIntegratedNicknames is true, this setting is ignored)""").define("enableIntegratedNicknames", true);
 			autoEnableChatNicknameCommand = builder.comment("When true, enables the integrated nickname-related commands if FTB essentials is not present").define("autoIntegratedNicknames", true);
 			maximumNicknameLength = builder.comment("Maximum allowed nickname length (for integrated nickname commands)").defineInRange("maximumNicknameLength", 50, 1, 500);
 			minimumNicknameLength = builder.comment("Minimum allowed nickname length (for integrated nickname commands)").defineInRange("minimumNicknameLength", 3, 1, 500);
@@ -130,6 +133,17 @@ public class ConfigHandler {
 		
 		private boolean checkLength(Object string) {
 			return string != null && ((String)string).length() <= 2;
+		}
+		private List<String> getTimezones() {
+			try {
+				if (!List.of(TimeZone.getAvailableIDs()).isEmpty()) {
+					return List.of(TimeZone.getAvailableIDs());
+				} else {
+					return List.of("UTC");
+				}
+			} catch (Exception ignored) {
+				return List.of("UTC");
+			}
 		}
 	}
 }

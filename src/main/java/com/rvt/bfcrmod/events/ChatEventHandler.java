@@ -31,29 +31,23 @@ public class ChatEventHandler implements IReloadable {
 	private static String timeSeparator = null;
 	private static boolean markdownEnabled = false;
 	private static String chatMessageFormat = null;
-	private static ChatFormatting chatMessageColor = ChatFormatting.WHITE;
-	private static boolean loaded = false;
 	
-	@Override
+    @Override
 	public void reloadConfigOptions() {
-		loaded = false;
-		timestampFormat = ConfigHandler.config.timestampFormat.get();
-		timeZone = ConfigHandler.config.setTimezone.get();
-		enableTimestamp = ConfigHandler.config.enableTimestamp.get();
-		timeSeparator = ConfigHandler.config.timeSeparator.get();
-		markdownEnabled = ConfigHandler.config.enableMarkdown.get();
-		chatMessageFormat = ConfigHandler.config.chatMessageFormat.get();
-		chatMessageColor = ConfigHandler.config.chatMessageColor.get();
-		loaded = true;
-	}
-
-	public static ChatFormatting getChatMessageColor() {
-		return chatMessageColor;
+		try {
+			timestampFormat = ConfigHandler.config.timestampFormat.get();
+			timeZone = ConfigHandler.config.setTimezone.get();
+			enableTimestamp = ConfigHandler.config.enableTimestamp.get();
+			timeSeparator = ConfigHandler.config.timeSeparator.get();
+			markdownEnabled = ConfigHandler.config.enableMarkdown.get();
+			chatMessageFormat = ConfigHandler.config.chatMessageFormat.get();
+		} catch (Exception e) {
+			BetterForgeChat.LOGGER.error("Failed to load config options: ", e);
+		}
 	}
 	
 	@SubscribeEvent
     public static void onServerChat(ServerChatEvent e) {
-		if(!loaded) return; // Just do nothing until everything's ready to go!
     	ServerPlayer player = e.getPlayer();
         UUID uuid = player.getUUID();
         String msg = e.getMessage().getString();

@@ -28,10 +28,14 @@ public class PlayerEventHandler implements IReloadable {
 	
 	@Override
 	public void reloadConfigOptions() {
-		enableNicknamesInTabList = ConfigHandler.config.enableNicknamesInTabList.get();
-		enableMetadataInTabList = ConfigHandler.config.enableMetadataInTabList.get();
-		enableNameTagIntegration = ConfigHandler.config.enableNameTagIntegration.get();
-		enableTabListIntegration = ConfigHandler.config.enableTabListIntegration.get();
+		try {
+			enableNicknamesInTabList = ConfigHandler.config.enableNicknamesInTabList.get();
+			enableMetadataInTabList = ConfigHandler.config.enableMetadataInTabList.get();
+			enableNameTagIntegration = ConfigHandler.config.enableNameTagIntegration.get();
+			enableTabListIntegration = ConfigHandler.config.enableTabListIntegration.get();
+		} catch (Exception e) {
+			BetterForgeChat.LOGGER.error("Failed to load config options: ", e);
+		}
 	}
 	public static boolean getEnableNameTagIntegration() {
 		return enableNameTagIntegration;
@@ -54,11 +58,11 @@ public class PlayerEventHandler implements IReloadable {
 	}
 	@SubscribeEvent
 	public static void onSavePlayerData(SaveToFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.saveToDir(e.getPlayerDirectory());
+		if (BetterForgeChat.instance.nicknameProvider != null && BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.saveToDir(e.getPlayerDirectory());
 	}
 	@SubscribeEvent
 	public static void onLoadPlayerData(LoadFromFile e) {
-		if (BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.loadFromDir(e.getPlayerDirectory());
+		if (BetterForgeChat.instance.nicknameProvider != null && BetterForgeChat.instance.nicknameProvider.getProviderName().equals("BetterNeoForgeChat")) PlayerData.loadFromDir(e.getPlayerDirectory());
 	}
 	
 	public static void reloadPlayerName(@NotNull ServerPlayer player, boolean refresh) {

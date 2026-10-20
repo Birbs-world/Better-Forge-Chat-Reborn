@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.rvt.bfcrmod.config.ConfigHandler;
 import com.rvt.bfcrmod.config.ConfigurationEventHandler;
 import com.rvt.bfcrmod.events.ChatEventHandler;
+import com.rvt.bfcrmod.events.ExternalModLoadingEvent;
 import com.rvt.bfcrmod.events.PlayerEventHandler;
 import com.rvt.bfcrmod.utils.BetterForgeChatUtilities;
 import com.rvt.bfcrmod.utils.IMetadataProvider;
@@ -20,7 +21,7 @@ import org.slf4j.Logger;
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(BetterForgeChat.MODID)
 public class BetterForgeChat {
-	public static final String CHAT_ID_STR = 
+	public static final String CHAT_ID_STR =
 			"&cBetter &9&lNeoForge&r &eChat&r \n&d(c) Disa Kandria 2024-2026, Jeremiah Lowe 2022-2024&r\n";
 	public static final String MODID = "bfcrmod";
 	public static final String VERSION = "V5.0.1";
@@ -39,6 +40,7 @@ public class BetterForgeChat {
         ConfigurationEventHandler.registerReloadable(new Parser());
         ConfigurationEventHandler.registerReloadable(new NickCommands());
         ConfigurationEventHandler.registerReloadable(new BetterForgeChatUtilities());
+        ConfigurationEventHandler.registerReloadable(new ExternalModLoadingEvent());
         
         container.registerConfig(ModConfig.Type.COMMON, ConfigHandler.spec);//set config type and config to register
         

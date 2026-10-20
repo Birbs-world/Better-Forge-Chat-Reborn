@@ -17,7 +17,7 @@ public class ConfigurationEventHandler {
 	
 	public static void reloadConfigOptions() {
 		for(IReloadable reloadable : reloadables)
-			if(reloadable != null)
+			if(reloadable != null && ConfigHandler.spec.isLoaded())
 				reloadable.reloadConfigOptions();
 	}
 
