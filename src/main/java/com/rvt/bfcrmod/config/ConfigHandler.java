@@ -73,7 +73,7 @@ public class ConfigHandler {
 						Set server timezone for BFCR chat messages
 						Uses TZ identifier e.g. Pacific/Auckland
 						To identify your timezone see: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones""")
-					.defineInList("setTimezone","UTC", getTimezones());
+					.define("setTimezone","UTC");
 			timeSeparator = builder.comment("Set separator character").define("timeSeparator","|");
 			enableFtbEssentials = builder.comment("""
 						Enables or disables FTB essentials nickname integration.
