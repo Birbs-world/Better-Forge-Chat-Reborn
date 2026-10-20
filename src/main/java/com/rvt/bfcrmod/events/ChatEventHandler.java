@@ -2,6 +2,7 @@ package com.rvt.bfcrmod.events;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class ChatEventHandler implements IReloadable {
 		if(msg.isEmpty()) return;
 		String newMsg = chatMessageFormat;
 		
-		if (enableTimestamp && StringUtils.isNotBlank(timestampFormat) && StringUtils.isNotBlank(timeZone)) {
+		if (enableTimestamp && StringUtils.isNotBlank(timestampFormat) && StringUtils.isNotBlank(timeZone) && List.of(TimeZone.getAvailableIDs()).contains(timeZone)) {
 			SimpleDateFormat dateFormat;
 			dateFormat = new SimpleDateFormat(timestampFormat);
 			dateFormat.setTimeZone(TimeZone.getTimeZone(timeZone));
