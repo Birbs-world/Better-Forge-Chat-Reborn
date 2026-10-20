@@ -13,7 +13,12 @@ public class BetterForgeChatUtilities implements IReloadable {
 	private static String playerNameFormat = "";
 	@Override
 	public void reloadConfigOptions() {
-		playerNameFormat = ConfigHandler.config.playerNameFormat.get();
+		try {
+			playerNameFormat = ConfigHandler.config.playerNameFormat.get();
+		} catch (Exception e) {
+			BetterForgeChat.LOGGER.error("Failed to load config options: ", e);
+		}
+		
 	}
 	
 	public static String getRawPreferredPlayerName(Player player) {

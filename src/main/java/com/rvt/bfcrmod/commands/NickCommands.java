@@ -33,17 +33,21 @@ public class NickCommands implements IReloadable {
 	
 	@Override
 	public void reloadConfigOptions() {
-		minNicknameLength = ConfigHandler.config.minimumNicknameLength.get();
-		maxNicknameLength = ConfigHandler.config.maximumNicknameLength.get();
-		if(minNicknameLength > maxNicknameLength) {
-			int oldMin = minNicknameLength;
-			minNicknameLength = maxNicknameLength;
-			maxNicknameLength = oldMin;
-			BetterForgeChat.LOGGER.warn("Minimum nickname length was greater then maximum, swapped vales");
-            BetterForgeChat.LOGGER.warn("{} < nickname.length() < {}", minNicknameLength, maxNicknameLength);
+		try {
+			minNicknameLength = ConfigHandler.config.minimumNicknameLength.get();
+			maxNicknameLength = ConfigHandler.config.maximumNicknameLength.get();
+			if(minNicknameLength > maxNicknameLength) {
+				int oldMin = minNicknameLength;
+				minNicknameLength = maxNicknameLength;
+				maxNicknameLength = oldMin;
+				BetterForgeChat.LOGGER.warn("Minimum nickname length was greater then maximum, swapped vales");
+				BetterForgeChat.LOGGER.warn("{} < nickname.length() < {}", minNicknameLength, maxNicknameLength);
+			}
+			cfgWhoIsEnabled = ConfigHandler.config.enableWhoisCommand.get();
+			cfgNickEnabled = ConfigHandler.config.enableChatNicknameCommand.get();
+		} catch (Exception e) {
+			BetterForgeChat.LOGGER.error("Failed to load config options: ", e);
 		}
-		cfgWhoIsEnabled = ConfigHandler.config.enableWhoisCommand.get();
-		cfgNickEnabled = ConfigHandler.config.enableChatNicknameCommand.get();
 	}
 	public static void register(CommandDispatcher<CommandSourceStack> disp) {
 		/* /nick */
@@ -123,7 +127,7 @@ public class NickCommands implements IReloadable {
 		String nick = reset ? null : StringArgumentType.getString(ctx, "nickname");
 		String user = other ? StringArgumentType.getString(ctx, "username") : null;
 		/* /nick OR /nick <nickname> */
-		if(player != null && user == null) 
+		if(player != null && user == null)
 			return assignNickname(ctx, player, nick);
 		/* /nickfor <user> OR /nickfor <user> <nickname> */
 		if(user != null) {

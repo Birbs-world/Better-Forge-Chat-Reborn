@@ -12,10 +12,6 @@ build
 .gradle
 .eclipse
 run
-./runs
-run-data
-runClient/*
-runServer/*
-runTestServer/*
 repo
 bfcr-neoforge-1.21.1.code-workspace
+.vscode

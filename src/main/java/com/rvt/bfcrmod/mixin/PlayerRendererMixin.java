@@ -19,6 +19,7 @@ public abstract class PlayerRendererMixin {
         argsOnly = true
     )
     protected Component renderNameTag(Component name, AbstractClientPlayer abstractClientPlayer, Component originalName, PoseStack poseStack, MultiBufferSource multiBufferSource) {
+        if (Minecraft.getInstance().level == null) return name;
         return PlayerEventHandler.getEnableNameTagIntegration() ? abstractClientPlayer.getCustomName() : name;
     }
 }

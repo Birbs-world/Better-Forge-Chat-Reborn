@@ -1,11 +1,6 @@
 package com.rvt.bfcrmod;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.rvt.bfcrmod.config.ConfigHandler;
 import com.rvt.bfcrmod.config.IReloadable;
@@ -29,19 +24,24 @@ public class Parser implements IReloadable {
     private static String strikethroughSymbol2 = "";
     private static String underlineSymbol1 = "__";
     private static String underlineSymbol2 = "";
-    
+    private static ChatFormatting chatMessageColor = ChatFormatting.WHITE;
     @Override
     public void reloadConfigOptions() {
-        boldSymbol1 = readSymbol(ConfigHandler.config.boldSymbol1.get(), boldSymbol1);
-        boldSymbol2 = readSymbol(ConfigHandler.config.boldSymbol2.get(), boldSymbol2);
-        italicSymbol1 = readSymbol(ConfigHandler.config.italicSymbol1.get(), italicSymbol1);
-        italicSymbol2 = readSymbol(ConfigHandler.config.italicSymbol2.get(), italicSymbol2);
-        obfuscatedSymbol1 = readSymbol(ConfigHandler.config.obfuscatedSymbol1.get(), obfuscatedSymbol1);
-        obfuscatedSymbol2 = readSymbol(ConfigHandler.config.obfuscatedSymbol2.get(), obfuscatedSymbol2);
-        strikethroughSymbol1 = readSymbol(ConfigHandler.config.strikethroughSymbol1.get(), strikethroughSymbol1);
-        strikethroughSymbol2 = readSymbol(ConfigHandler.config.strikethroughSymbol2.get(), strikethroughSymbol2);
-        underlineSymbol1 = readSymbol(ConfigHandler.config.underlineSymbol1.get(), underlineSymbol1);
-        underlineSymbol2 = readSymbol(ConfigHandler.config.underlineSymbol2.get(), underlineSymbol2);
+        try {
+            boldSymbol1 = readSymbol(ConfigHandler.config.boldSymbol1.get(), boldSymbol1);
+            boldSymbol2 = readSymbol(ConfigHandler.config.boldSymbol2.get(), boldSymbol2);
+            italicSymbol1 = readSymbol(ConfigHandler.config.italicSymbol1.get(), italicSymbol1);
+            italicSymbol2 = readSymbol(ConfigHandler.config.italicSymbol2.get(), italicSymbol2);
+            obfuscatedSymbol1 = readSymbol(ConfigHandler.config.obfuscatedSymbol1.get(), obfuscatedSymbol1);
+            obfuscatedSymbol2 = readSymbol(ConfigHandler.config.obfuscatedSymbol2.get(), obfuscatedSymbol2);
+            strikethroughSymbol1 = readSymbol(ConfigHandler.config.strikethroughSymbol1.get(), strikethroughSymbol1);
+            strikethroughSymbol2 = readSymbol(ConfigHandler.config.strikethroughSymbol2.get(), strikethroughSymbol2);
+            underlineSymbol1 = readSymbol(ConfigHandler.config.underlineSymbol1.get(), underlineSymbol1);
+            underlineSymbol2 = readSymbol(ConfigHandler.config.underlineSymbol2.get(), underlineSymbol2);
+            chatMessageColor = ChatFormatting.getByName(ConfigHandler.config.chatMessageColor.get().toString());
+        } catch (Exception e) {
+            BetterForgeChat.LOGGER.error("Failed to load config options: ", e);
+        }
     }
     
     public static MutableComponent parse(String input) {
@@ -273,8 +273,7 @@ public class Parser implements IReloadable {
     private record Marker(String token, List<InlineFormat> formats) {}
     
     private static class ParserState {
-        private final ChatFormatting defaultColor = ChatEventHandler.getChatMessageColor();
-        private Style legacyStyle = Style.EMPTY.withColor(defaultColor);
+        private Style legacyStyle = Style.EMPTY.withColor(chatMessageColor);
         private int boldDepth;
         private int italicDepth;
         private int underlinedDepth;
@@ -283,7 +282,7 @@ public class Parser implements IReloadable {
         
         private void applyLegacyFormat(ChatFormatting formatting) {
             legacyStyle = formatting == ChatFormatting.RESET
-                ? Style.EMPTY.withColor(defaultColor)
+                ? Style.EMPTY.withColor(chatMessageColor)
                 : legacyStyle.applyLegacyFormat(formatting);
         }
 
@@ -292,7 +291,7 @@ public class Parser implements IReloadable {
         }
 
         private static ChatFormatting configuredDefaultColor() {
-            ChatFormatting color = ChatEventHandler.getChatMessageColor();
+            ChatFormatting color = chatMessageColor;
             return color == null ? ChatFormatting.WHITE : color;
         }
         
