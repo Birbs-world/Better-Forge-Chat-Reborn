@@ -29,6 +29,7 @@ public class ConfigHandler {
 		public final ModConfigSpec.BooleanValue enableTabListIntegration;
 		public final ModConfigSpec.BooleanValue enableMetadataInTabList;
 		public final ModConfigSpec.BooleanValue enableNicknamesInTabList;
+		public final ModConfigSpec.BooleanValue enableNicknamesInAnnouncements;
 		public final ModConfigSpec.BooleanValue enableNameTagIntegration;
 		public final ModConfigSpec.BooleanValue enableWhoisCommand;
 		public final ModConfigSpec.BooleanValue enableChatNicknameCommand;
@@ -83,6 +84,7 @@ public class ConfigHandler {
 			enableTabListIntegration = builder.comment("Enables or disables custom tab list information").define("tabList", true);
 			enableMetadataInTabList = builder.comment("Enables or disables prefixes & suffixes in the tab list").define("tabListMetadata", true);
 			enableNicknamesInTabList = builder.comment("Enables or disables nicknames in the tab list").define("tabListNicknames", true);
+			enableNicknamesInAnnouncements = builder.comment("Enables or disables nicknames in chat announcements like death messages and advancements.").define("enableNicknamesInAnnouncements", true);
 			enableNameTagIntegration = builder.comment("""
 						Enables or disables nicknames overwriting name tags.
 						ONLY WORKS WHEN THE MOD IS INSTALLED ON THE CLIENT AS WELL!""").define("enableNameTagIntegration", true);
